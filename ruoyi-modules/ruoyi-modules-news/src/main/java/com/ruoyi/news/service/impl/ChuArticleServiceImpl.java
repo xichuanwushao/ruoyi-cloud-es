@@ -1,8 +1,15 @@
 package com.ruoyi.news.service.impl;
 
+import java.util.Date;
 import java.util.List;
 import com.ruoyi.common.core.utils.DateUtils;
+import com.ruoyi.common.core.web.domain.AjaxResult;
+import com.ruoyi.common.security.utils.SecurityUtils;
+import com.ruoyi.news.enums.*;
 import com.ruoyi.news.util.UuidUtil;
+import com.ruoyi.news.util.result.ResponseStatusEnum;
+import com.ruoyi.system.api.domain.SysUser;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.news.mapper.ChuArticleMapper;
@@ -54,8 +61,26 @@ public class ChuArticleServiceImpl implements IChuArticleService
     @Override
     public int insertChuArticle(ChuArticle chuArticle)
     {
+        SysUser sysUser = SecurityUtils.getLoginUser().getSysUser();
         chuArticle.setId(UuidUtil.getShortUuid());
         chuArticle.setCreateTime(DateUtils.getNowDate());
+
+
+        chuArticle.setArticleType(1);
+        chuArticle.setIsAppoint(0);
+        chuArticle.setArticleStatus(ArticleReviewStatus.REVIEWING.type);
+        chuArticle.setCommentCounts(0L);
+        chuArticle.setReadCounts(0L);
+        chuArticle.setIsDelete(YesOrNo.NO.type);
+        chuArticle.setUpdateTime(new Date());
+        chuArticle.setUpdateTime(new Date());
+        chuArticle.setPublishUserId(sysUser.getUserId()+"");
+        if (chuArticle.getIsAppoint() == ArticleAppointType.TIMING.type) {
+            chuArticle.setPublishTime(chuArticle.getPublishTime());
+        } else if (chuArticle.getIsAppoint() == ArticleAppointType.IMMEDIATELY.type) {
+            chuArticle.setPublishTime(new Date());
+        }
+
         return chuArticleMapper.insertChuArticle(chuArticle);
     }
 
