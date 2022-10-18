@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.news.mapper.ChuArticleMapper">
+    
+    <resultMap type="ChuArticle" id="ChuArticleResult">
+        <result property="id"    column="id"    />
+        <result property="title"    column="title"    />
+        <result property="content"    column="content"    />
+        <result property="categoryId"    column="category_id"    />
+        <result property="articleType"    column="article_type"    />
+        <result property="articleCover"    column="article_cover"    />
+        <result property="isAppoint"    column="is_appoint"    />
+        <result property="articleStatus"    column="article_status"    />
+        <result property="publishUserId"    column="publish_user_id"    />
+        <result property="publishTime"    column="publish_time"    />
+        <result property="readCounts"    column="read_counts"    />
+        <result property="commentCounts"    column="comment_counts"    />
+        <result property="mongoFileId"    column="mongo_file_id"    />
+        <result property="isDelete"    column="is_delete"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectChuArticleVo">
+        select id, title, content, category_id, article_type, article_cover, is_appoint, article_status, publish_user_id, publish_time, read_counts, comment_counts, mongo_file_id, is_delete, create_time, update_time from chu_article
+    </sql>
+
+    <select id="selectChuArticleList" parameterType="ChuArticle" resultMap="ChuArticleResult">
+        <include refid="selectChuArticleVo"/>
+        <where>  
+            <if test="title != null  and title != ''"> and title like concat('%', #{title}, '%')</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="categoryId != null "> and category_id = #{categoryId}</if>
+            <if test="articleType != null "> and article_type = #{articleType}</if>
+            <if test="articleCover != null  and articleCover != ''"> and article_cover = #{articleCover}</if>
+            <if test="isAppoint != null "> and is_appoint = #{isAppoint}</if>
+            <if test="articleStatus != null "> and article_status = #{articleStatus}</if>
+            <if test="publishUserId != null  and publishUserId != ''"> and publish_user_id = #{publishUserId}</if>
+            <if test="params.beginPublishTime != null and params.beginPublishTime != '' and params.endPublishTime != null and params.endPublishTime != ''"> and publish_time between #{params.beginPublishTime} and #{params.endPublishTime}</if>
+            <if test="readCounts != null "> and read_counts = #{readCounts}</if>
+            <if test="commentCounts != null "> and comment_counts = #{commentCounts}</if>
+            <if test="mongoFileId != null  and mongoFileId != ''"> and mongo_file_id = #{mongoFileId}</if>
+            <if test="isDelete != null "> and is_delete = #{isDelete}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+            <if test="params.beginUpdateTime != null and params.beginUpdateTime != '' and params.endUpdateTime != null and params.endUpdateTime != ''"> and update_time between #{params.beginUpdateTime} and #{params.endUpdateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectChuArticleById" parameterType="String" resultMap="ChuArticleResult">
+        <include refid="selectChuArticleVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertChuArticle" parameterType="ChuArticle">
+        insert into chu_article
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="title != null and title != ''">title,</if>
+            <if test="content != null and content != ''">content,</if>
+            <if test="categoryId != null">category_id,</if>
+            <if test="articleType != null">article_type,</if>
+            <if test="articleCover != null">article_cover,</if>
+            <if test="isAppoint != null">is_appoint,</if>
+            <if test="articleStatus != null">article_status,</if>
+            <if test="publishUserId != null and publishUserId != ''">publish_user_id,</if>
+            <if test="publishTime != null">publish_time,</if>
+            <if test="readCounts != null">read_counts,</if>
+            <if test="commentCounts != null">comment_counts,</if>
+            <if test="mongoFileId != null">mongo_file_id,</if>
+            <if test="isDelete != null">is_delete,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="content != null and content != ''">#{content},</if>
+            <if test="categoryId != null">#{categoryId},</if>
+            <if test="articleType != null">#{articleType},</if>
+            <if test="articleCover != null">#{articleCover},</if>
+            <if test="isAppoint != null">#{isAppoint},</if>
+            <if test="articleStatus != null">#{articleStatus},</if>
+            <if test="publishUserId != null and publishUserId != ''">#{publishUserId},</if>
+            <if test="publishTime != null">#{publishTime},</if>
+            <if test="readCounts != null">#{readCounts},</if>
+            <if test="commentCounts != null">#{commentCounts},</if>
+            <if test="mongoFileId != null">#{mongoFileId},</if>
+            <if test="isDelete != null">#{isDelete},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateChuArticle" parameterType="ChuArticle">
+        update chu_article
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="content != null and content != ''">content = #{content},</if>
+            <if test="categoryId != null">category_id = #{categoryId},</if>
+            <if test="articleType != null">article_type = #{articleType},</if>
+            <if test="articleCover != null">article_cover = #{articleCover},</if>
+            <if test="isAppoint != null">is_appoint = #{isAppoint},</if>
+            <if test="articleStatus != null">article_status = #{articleStatus},</if>
+            <if test="publishUserId != null and publishUserId != ''">publish_user_id = #{publishUserId},</if>
+            <if test="publishTime != null">publish_time = #{publishTime},</if>
+            <if test="readCounts != null">read_counts = #{readCounts},</if>
+            <if test="commentCounts != null">comment_counts = #{commentCounts},</if>
+            <if test="mongoFileId != null">mongo_file_id = #{mongoFileId},</if>
+            <if test="isDelete != null">is_delete = #{isDelete},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteChuArticleById" parameterType="String">
+        delete from chu_article where id = #{id}
+    </delete>
+
+    <delete id="deleteChuArticleByIds" parameterType="String">
+        delete from chu_article where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
