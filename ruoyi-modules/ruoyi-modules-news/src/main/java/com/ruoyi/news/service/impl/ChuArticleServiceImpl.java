@@ -2,6 +2,7 @@ package com.ruoyi.news.service.impl;
 
 import java.util.List;
 import com.ruoyi.common.core.utils.DateUtils;
+import com.ruoyi.news.util.UuidUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.news.mapper.ChuArticleMapper;
@@ -53,6 +54,7 @@ public class ChuArticleServiceImpl implements IChuArticleService
     @Override
     public int insertChuArticle(ChuArticle chuArticle)
     {
+        chuArticle.setId(UuidUtil.getShortUuid());
         chuArticle.setCreateTime(DateUtils.getNowDate());
         return chuArticleMapper.insertChuArticle(chuArticle);
     }
