@@ -9,7 +9,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="文章所属分类id" prop="categoryId">
+      <el-form-item label="所属分类" prop="categoryId">
         <el-select v-model="queryParams.categoryId" placeholder="请选择文章所属分类id" clearable>
           <el-option
             v-for="dict in dict.type.chu_article_category"
@@ -19,33 +19,33 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="文章类型，1：图文" prop="articleType">
-        <el-select v-model="queryParams.articleType" placeholder="请选择文章类型，1：图文" clearable>
-          <el-option
-            v-for="dict in dict.type.chu_article_type"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="文章封面图，article_type=1 的时候展示" prop="articleCover">
-        <el-input
-          v-model="queryParams.articleCover"
-          placeholder="请输入文章封面图，article_type=1 的时候展示"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="是否是预约定时发布的文章，1：预约" prop="isAppoint">
-        <el-input
-          v-model="queryParams.isAppoint"
-          placeholder="请输入是否是预约定时发布的文章，1：预约"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="文章状态，1：审核中" prop="articleStatus">
+<!--      <el-form-item label="文章类型，1：图文" prop="articleType">-->
+<!--        <el-select v-model="queryParams.articleType" placeholder="请选择文章类型，1：图文" clearable>-->
+<!--          <el-option-->
+<!--            v-for="dict in dict.type.chu_article_type"-->
+<!--            :key="dict.value"-->
+<!--            :label="dict.label"-->
+<!--            :value="dict.value"-->
+<!--          />-->
+<!--        </el-select>-->
+<!--      </el-form-item>-->
+<!--      <el-form-item label="文章封面图，article_type=1 的时候展示" prop="articleCover">-->
+<!--        <el-input-->
+<!--          v-model="queryParams.articleCover"-->
+<!--          placeholder="请输入文章封面图，article_type=1 的时候展示"-->
+<!--          clearable-->
+<!--          @keyup.enter.native="handleQuery"-->
+<!--        />-->
+<!--      </el-form-item>-->
+<!--      <el-form-item label="是否是预约定时发布的文章，1：预约" prop="isAppoint">-->
+<!--        <el-input-->
+<!--          v-model="queryParams.isAppoint"-->
+<!--          placeholder="请输入是否是预约定时发布的文章，1：预约"-->
+<!--          clearable-->
+<!--          @keyup.enter.native="handleQuery"-->
+<!--        />-->
+<!--      </el-form-item>-->
+      <el-form-item label="文章状态" prop="articleStatus">
         <el-select v-model="queryParams.articleStatus" placeholder="请选择文章状态，1：审核中" clearable>
           <el-option
             v-for="dict in dict.type.chu_article_status"
@@ -55,15 +55,15 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="发布者用户id" prop="publishUserId">
-        <el-input
-          v-model="queryParams.publishUserId"
-          placeholder="请输入发布者用户id"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="文章发布时间">
+<!--      <el-form-item label="发布者用户id" prop="publishUserId">-->
+<!--        <el-input-->
+<!--          v-model="queryParams.publishUserId"-->
+<!--          placeholder="请输入发布者用户id"-->
+<!--          clearable-->
+<!--          @keyup.enter.native="handleQuery"-->
+<!--        />-->
+<!--      </el-form-item>-->
+      <el-form-item label="发布时间">
         <el-date-picker
           v-model="daterangePublishTime"
           style="width: 240px"
@@ -74,60 +74,60 @@
           end-placeholder="结束日期"
         ></el-date-picker>
       </el-form-item>
-      <el-form-item label="用户累计点击阅读数" prop="readCounts">
-        <el-input
-          v-model="queryParams.readCounts"
-          placeholder="请输入用户累计点击阅读数"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="文章评论总数。评论防刷，距离上次评论需要间隔时间控制几秒" prop="commentCounts">
-        <el-input
-          v-model="queryParams.commentCounts"
-          placeholder="请输入文章评论总数。评论防刷，距离上次评论需要间隔时间控制几秒"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="mongo图片id" prop="mongoFileId">
-        <el-input
-          v-model="queryParams.mongoFileId"
-          placeholder="请输入mongo图片id"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="逻辑删除状态，非物理删除，1：删除，0：未删除" prop="isDelete">
-        <el-input
-          v-model="queryParams.isDelete"
-          placeholder="请输入逻辑删除状态，非物理删除，1：删除，0：未删除"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="文章的创建时间">
-        <el-date-picker
-          v-model="daterangeCreateTime"
-          style="width: 240px"
-          value-format="yyyy-MM-dd"
-          type="daterange"
-          range-separator="-"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-        ></el-date-picker>
-      </el-form-item>
-      <el-form-item label="文章的修改时间">
-        <el-date-picker
-          v-model="daterangeUpdateTime"
-          style="width: 240px"
-          value-format="yyyy-MM-dd"
-          type="daterange"
-          range-separator="-"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-        ></el-date-picker>
-      </el-form-item>
+<!--      <el-form-item label="用户累计点击阅读数" prop="readCounts">-->
+<!--        <el-input-->
+<!--          v-model="queryParams.readCounts"-->
+<!--          placeholder="请输入用户累计点击阅读数"-->
+<!--          clearable-->
+<!--          @keyup.enter.native="handleQuery"-->
+<!--        />-->
+<!--      </el-form-item>-->
+<!--      <el-form-item label="文章评论总数。评论防刷，距离上次评论需要间隔时间控制几秒" prop="commentCounts">-->
+<!--        <el-input-->
+<!--          v-model="queryParams.commentCounts"-->
+<!--          placeholder="请输入文章评论总数。评论防刷，距离上次评论需要间隔时间控制几秒"-->
+<!--          clearable-->
+<!--          @keyup.enter.native="handleQuery"-->
+<!--        />-->
+<!--      </el-form-item>-->
+<!--      <el-form-item label="mongo图片id" prop="mongoFileId">-->
+<!--        <el-input-->
+<!--          v-model="queryParams.mongoFileId"-->
+<!--          placeholder="请输入mongo图片id"-->
+<!--          clearable-->
+<!--          @keyup.enter.native="handleQuery"-->
+<!--        />-->
+<!--      </el-form-item>-->
+<!--      <el-form-item label="逻辑删除状态，非物理删除，1：删除，0：未删除" prop="isDelete">-->
+<!--        <el-input-->
+<!--          v-model="queryParams.isDelete"-->
+<!--          placeholder="请输入逻辑删除状态，非物理删除，1：删除，0：未删除"-->
+<!--          clearable-->
+<!--          @keyup.enter.native="handleQuery"-->
+<!--        />-->
+<!--      </el-form-item>-->
+<!--      <el-form-item label="文章的创建时间">-->
+<!--        <el-date-picker-->
+<!--          v-model="daterangeCreateTime"-->
+<!--          style="width: 240px"-->
+<!--          value-format="yyyy-MM-dd"-->
+<!--          type="daterange"-->
+<!--          range-separator="-"-->
+<!--          start-placeholder="开始日期"-->
+<!--          end-placeholder="结束日期"-->
+<!--        ></el-date-picker>-->
+<!--      </el-form-item>-->
+<!--      <el-form-item label="文章的修改时间">-->
+<!--        <el-date-picker-->
+<!--          v-model="daterangeUpdateTime"-->
+<!--          style="width: 240px"-->
+<!--          value-format="yyyy-MM-dd"-->
+<!--          type="daterange"-->
+<!--          range-separator="-"-->
+<!--          start-placeholder="开始日期"-->
+<!--          end-placeholder="结束日期"-->
+<!--        ></el-date-picker>-->
+<!--      </el-form-item>-->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -182,50 +182,54 @@
 
     <el-table v-loading="loading" :data="articleList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="主键" align="center" prop="id" />
+<!--      <el-table-column label="主键" align="center" prop="id" />-->
       <el-table-column label="文章标题" align="center" prop="title" />
-      <el-table-column label="文章内容，长度不超过9999，需要在前后端判断" align="center" prop="content" />
-      <el-table-column label="文章所属分类id" align="center" prop="categoryId">
+<!--      <el-table-column label="文章内容，长度不超过9999，需要在前后端判断" align="center" prop="content" />-->
+      <el-table-column label="文章分类" align="center" prop="categoryId">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.chu_article_category" :value="scope.row.categoryId"/>
         </template>
       </el-table-column>
-      <el-table-column label="文章类型，1：图文" align="center" prop="articleType">
+      <el-table-column label="文章类型" align="center" prop="articleType">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.chu_article_type" :value="scope.row.articleType"/>
         </template>
       </el-table-column>
-      <el-table-column label="文章封面图，article_type=1 的时候展示" align="center" prop="articleCover" />
-      <el-table-column label="是否是预约定时发布的文章，1：预约" align="center" prop="isAppoint">
+      <el-table-column label="封面图" align="center" prop="articleCover" width="100">
+        <template slot-scope="scope">
+          <image-preview :src="scope.row.articleCover" :width="50" :height="50"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="预约发布" align="center" prop="isAppoint">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.chu_is_appoint" :value="scope.row.isAppoint"/>
         </template>
       </el-table-column>
-      <el-table-column label="文章状态，1：审核中" align="center" prop="articleStatus">
+      <el-table-column label="文章状态" align="center" prop="articleStatus">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.chu_article_status" :value="scope.row.articleStatus"/>
         </template>
       </el-table-column>
-      <el-table-column label="发布者用户id" align="center" prop="publishUserId" />
-      <el-table-column label="文章发布时间" align="center" prop="publishTime" width="180">
+      <el-table-column label="发布者" align="center" prop="publishUserId" />
+      <el-table-column label="发布时间" align="center" prop="publishTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.publishTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="用户累计点击阅读数" align="center" prop="readCounts" />
-      <el-table-column label="文章评论总数。评论防刷，距离上次评论需要间隔时间控制几秒" align="center" prop="commentCounts" />
-      <el-table-column label="mongo图片id" align="center" prop="mongoFileId" />
-      <el-table-column label="逻辑删除状态，非物理删除，1：删除，0：未删除" align="center" prop="isDelete" />
+      <el-table-column label="阅读数" align="center" prop="readCounts" />
+      <el-table-column label="评论总数" align="center" prop="commentCounts" />
+      <el-table-column label="mongo图片" align="center" prop="mongoFileId" />
+<!--      <el-table-column label="逻删除状态，非物理删除，1：删除，0：未删除" align="center" prop="isDelete" />-->
       <el-table-column label="文章的创建时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="文章的修改时间" align="center" prop="updateTime" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.updateTime, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
+<!--      <el-table-column label="文章的修改时间" align="center" prop="updateTime" width="180">-->
+<!--        <template slot-scope="scope">-->
+<!--          <span>{{ parseTime(scope.row.updateTime, '{y}-{m}-{d}') }}</span>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -245,7 +249,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -260,10 +264,10 @@
         <el-form-item label="文章标题" prop="title">
           <el-input v-model="form.title" placeholder="请输入文章标题" />
         </el-form-item>
-        <el-form-item label="文章内容，长度不超过9999，需要在前后端判断">
+        <el-form-item label="文章内容">
           <editor v-model="form.content" :min-height="192"/>
         </el-form-item>
-        <el-form-item label="文章所属分类id" prop="categoryId">
+        <el-form-item label="文章所属" prop="categoryId">
           <el-select v-model="form.categoryId" placeholder="请选择文章所属分类id">
             <el-option
               v-for="dict in dict.type.chu_article_category"
@@ -273,54 +277,54 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="文章类型，1：图文" prop="articleType">
-          <el-select v-model="form.articleType" placeholder="请选择文章类型，1：图文">
-            <el-option
-              v-for="dict in dict.type.chu_article_type"
-              :key="dict.value"
-              :label="dict.label"
-:value="parseInt(dict.value)"
-            ></el-option>
-          </el-select>
+<!--        <el-form-item label="文章类型" prop="articleType">-->
+<!--          <el-select v-model="form.articleType" placeholder="请选择文章类型，1：图文">-->
+<!--            <el-option-->
+<!--              v-for="dict in dict.type.chu_article_type"-->
+<!--              :key="dict.value"-->
+<!--              :label="dict.label"-->
+<!--:value="parseInt(dict.value)"-->
+<!--            ></el-option>-->
+<!--          </el-select>-->
+<!--        </el-form-item>-->
+        <el-form-item label="封面图">
+          <image-upload v-model="form.articleCover"/>
         </el-form-item>
-        <el-form-item label="文章封面图，article_type=1 的时候展示" prop="articleCover">
-          <el-input v-model="form.articleCover" placeholder="请输入文章封面图，article_type=1 的时候展示" />
-        </el-form-item>
-        <el-form-item label="是否是预约定时发布的文章，1：预约" prop="isAppoint">
-          <el-input v-model="form.isAppoint" placeholder="请输入是否是预约定时发布的文章，1：预约" />
-        </el-form-item>
-        <el-form-item label="文章状态，1：审核中">
-          <el-radio-group v-model="form.articleStatus">
-            <el-radio
-              v-for="dict in dict.type.chu_article_status"
-              :key="dict.value"
-:label="parseInt(dict.value)"
-            >{{dict.label}}</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="发布者用户id" prop="publishUserId">
-          <el-input v-model="form.publishUserId" placeholder="请输入发布者用户id" />
-        </el-form-item>
-        <el-form-item label="文章发布时间" prop="publishTime">
-          <el-date-picker clearable
-            v-model="form.publishTime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择文章发布时间">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="用户累计点击阅读数" prop="readCounts">
-          <el-input v-model="form.readCounts" placeholder="请输入用户累计点击阅读数" />
-        </el-form-item>
-        <el-form-item label="文章评论总数。评论防刷，距离上次评论需要间隔时间控制几秒" prop="commentCounts">
-          <el-input v-model="form.commentCounts" placeholder="请输入文章评论总数。评论防刷，距离上次评论需要间隔时间控制几秒" />
-        </el-form-item>
-        <el-form-item label="mongo图片id" prop="mongoFileId">
-          <el-input v-model="form.mongoFileId" placeholder="请输入mongo图片id" />
-        </el-form-item>
-        <el-form-item label="逻辑删除状态，非物理删除，1：删除，0：未删除" prop="isDelete">
-          <el-input v-model="form.isDelete" placeholder="请输入逻辑删除状态，非物理删除，1：删除，0：未删除" />
-        </el-form-item>
+<!--        <el-form-item label="预约发布" prop="isAppoint">-->
+<!--          <el-input v-model="form.isAppoint" placeholder="请输入是否是预约定时发布的文章，1：预约" />-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="文章状态">-->
+<!--          <el-radio-group v-model="form.articleStatus">-->
+<!--            <el-radio-->
+<!--              v-for="dict in dict.type.chu_article_status"-->
+<!--              :key="dict.value"-->
+<!--:label="parseInt(dict.value)"-->
+<!--            >{{dict.label}}</el-radio>-->
+<!--          </el-radio-group>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="发布者" prop="publishUserId">-->
+<!--          <el-input v-model="form.publishUserId" placeholder="请输入发布者用户id" />-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="发布时间" prop="publishTime">-->
+<!--          <el-date-picker clearable-->
+<!--            v-model="form.publishTime"-->
+<!--            type="date"-->
+<!--            value-format="yyyy-MM-dd"-->
+<!--            placeholder="请选择文章发布时间">-->
+<!--          </el-date-picker>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="阅读数" prop="readCounts">-->
+<!--          <el-input v-model="form.readCounts" placeholder="请输入用户累计点击阅读数" />-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="评论总数" prop="commentCounts">-->
+<!--          <el-input v-model="form.commentCounts" placeholder="请输入文章评论总数。评论防刷，距离上次评论需要间隔时间控制几秒" />-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="mongo图片id" prop="mongoFileId">-->
+<!--          <el-input v-model="form.mongoFileId" placeholder="请输入mongo图片id" />-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="逻辑删除状态，非物理删除，1：删除，0：未删除" prop="isDelete">-->
+<!--          <el-input v-model="form.isDelete" placeholder="请输入逻辑删除状态，非物理删除，1：删除，0：未删除" />-->
+<!--        </el-form-item>-->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
