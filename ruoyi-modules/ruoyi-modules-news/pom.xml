@@ -81,7 +81,6 @@
         </dependency>
 
 
-
         <dependency>
             <groupId>com.ruoyi</groupId>
             <artifactId>ruoyi-common-elasticsearch</artifactId>
