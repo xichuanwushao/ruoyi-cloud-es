@@ -16,7 +16,6 @@
         <module>ruoyi-common-security</module>
         <module>ruoyi-common-datascope</module>
 		<module>ruoyi-common-datasource</module>
-		<module>ruoyi-common-elasticsearch</module>
     </modules>
 
     <artifactId>ruoyi-common</artifactId>

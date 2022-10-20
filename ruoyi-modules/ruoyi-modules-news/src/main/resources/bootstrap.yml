@@ -10,7 +10,3 @@ spring:
   profiles:
     # 环境配置
     active: dev
-  data:
-    elasticsearch:
-      cluster-name: xichuan-elasticsearch
-      cluster-nodes: 192.168.170.136:9300

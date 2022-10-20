@@ -241,11 +241,6 @@
             </dependency>
             <!-- easy-es -->
             <dependency>
-                <groupId>com.ruoyi</groupId>
-                <artifactId>ruoyi-common-elasticsearch</artifactId>
-                <version>${ruoyi.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>cn.easy-es</groupId>
                 <artifactId>easy-es-boot-starter</artifactId>
                 <version>${easy-es.version}</version>
