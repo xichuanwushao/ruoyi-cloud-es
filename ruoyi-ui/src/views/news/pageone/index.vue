@@ -102,7 +102,7 @@
 </template>
 
 <script>
-import { listArticle, getArticle, delArticle, addArticle, updateArticle } from "@/api/news/article";
+import { eslistArticle,listArticle, getArticle, delArticle, addArticle, updateArticle } from "@/api/news/article";
 
 export default {
   name: "Article",
@@ -219,7 +219,7 @@ export default {
         this.queryParams.params["beginUpdateTime"] = this.daterangeUpdateTime[0];
         this.queryParams.params["endUpdateTime"] = this.daterangeUpdateTime[1];
       }
-      listArticle(this.queryParams).then(response => {
+      eslistArticle(this.queryParams).then(response => {
         this.articleList = response.rows;
         this.total = response.total;
         this.loading = false;

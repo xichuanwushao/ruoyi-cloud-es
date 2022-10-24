@@ -4,6 +4,12 @@ import java.util.List;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
+import cn.easyes.core.biz.PageInfo;
+import cn.easyes.core.conditions.LambdaEsQueryWrapper;
+import com.ruoyi.common.core.web.page.PageDomain;
+import com.ruoyi.common.core.web.page.TableSupport;
+import com.ruoyi.news.domain.model.ArticleEO;
+import com.ruoyi.news.mapper.es.ArticleEOMapper;
 import com.ruoyi.news.util.enums.ArticleCoverType;
 import com.ruoyi.news.util.result.ResponseStatusEnum;
 import org.apache.commons.lang3.StringUtils;
@@ -39,6 +45,10 @@ public class ChuArticleController extends BaseController
     @Autowired
     private IChuArticleService chuArticleService;
 
+
+    @Autowired
+    private ArticleEOMapper articleEOMapper;
+
     /**
      * 查询文章资讯列表
      */
@@ -48,6 +58,27 @@ public class ChuArticleController extends BaseController
     {
         startPage();
         List<ChuArticle> list = chuArticleService.selectChuArticleList(chuArticle);
+        return getDataTable(list);
+    }
+
+
+
+    /**
+     * 查询文章资讯列表
+     */
+    @RequiresPermissions("news:article:list")
+    @GetMapping("/es/list")
+    public TableDataInfo eslist(ChuArticle chuArticle)
+    {
+
+        PageDomain pageDomain = TableSupport.buildPageRequest();
+        Integer pageNum = pageDomain.getPageNum();
+        Integer pageSize = pageDomain.getPageSize();
+        LambdaEsQueryWrapper<ArticleEO> wrapper = new LambdaEsQueryWrapper<>();
+//        wrapper.match(Document::getTitle, "老汉");
+        PageInfo<ArticleEO> documentPageInfo = articleEOMapper.pageQuery(wrapper,pageNum,pageSize);
+//        documentPageInfo.getList()
+        List<ArticleEO> list = documentPageInfo.getList();
         return getDataTable(list);
     }
 

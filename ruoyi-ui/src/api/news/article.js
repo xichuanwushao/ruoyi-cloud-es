@@ -42,3 +42,13 @@ export function delArticle(id) {
     method: 'delete'
   })
 }
+
+
+// 查询文章资讯列表
+export function eslistArticle(query) {
+  return request({
+    url: '/news/article/es/list',
+    method: 'get',
+    params: query
+  })
+}
