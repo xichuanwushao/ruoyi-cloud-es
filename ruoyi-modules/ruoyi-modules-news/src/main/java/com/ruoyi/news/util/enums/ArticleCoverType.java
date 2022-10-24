@@ -1,4 +1,4 @@
-package com.ruoyi.news.enums;
+package com.ruoyi.news.util.enums;
 
 /**
  * @Desc: 文章封面类型 枚举

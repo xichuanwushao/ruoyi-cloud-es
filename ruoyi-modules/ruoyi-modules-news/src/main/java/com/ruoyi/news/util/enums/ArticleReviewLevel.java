@@ -1,4 +1,4 @@
-package com.ruoyi.news.enums;
+package com.ruoyi.news.util.enums;
 
 /**
  * @Desc: 文章自动审核结果 枚举

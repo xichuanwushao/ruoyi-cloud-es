@@ -4,7 +4,7 @@ import java.util.List;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ruoyi.news.enums.ArticleCoverType;
+import com.ruoyi.news.util.enums.ArticleCoverType;
 import com.ruoyi.news.util.result.ResponseStatusEnum;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

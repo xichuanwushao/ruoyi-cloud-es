@@ -5,7 +5,7 @@ import java.util.List;
 import com.ruoyi.common.core.utils.DateUtils;
 import com.ruoyi.common.core.web.domain.AjaxResult;
 import com.ruoyi.common.security.utils.SecurityUtils;
-import com.ruoyi.news.enums.*;
+import com.ruoyi.news.util.enums.*;
 import com.ruoyi.news.util.UuidUtil;
 import com.ruoyi.news.util.result.ResponseStatusEnum;
 import com.ruoyi.system.api.domain.SysUser;

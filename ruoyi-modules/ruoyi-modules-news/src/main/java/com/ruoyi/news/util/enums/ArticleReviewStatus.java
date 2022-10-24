@@ -1,4 +1,4 @@
-package com.ruoyi.news.enums;
+package com.ruoyi.news.util.enums;
 
 /**
  * @Desc: 文章审核状态 枚举

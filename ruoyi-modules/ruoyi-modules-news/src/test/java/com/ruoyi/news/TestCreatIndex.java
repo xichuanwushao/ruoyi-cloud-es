@@ -1,8 +1,7 @@
 package com.ruoyi.news;
 
 import cn.easyes.core.conditions.LambdaEsQueryWrapper;
-import cn.easyes.core.conditions.LambdaEsUpdateWrapper;
-import com.ruoyi.news.domain.Document;
+import com.ruoyi.news.domain.model.Document;
 import com.ruoyi.news.mapper.es.DocumentMapper;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;

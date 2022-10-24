@@ -1,4 +1,4 @@
-package com.ruoyi.news.domain;
+package com.ruoyi.news.domain.model;
 
 /**
  * @author : wuxiao
