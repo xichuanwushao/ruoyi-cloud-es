@@ -5,11 +5,14 @@ import java.util.List;
 import com.ruoyi.common.core.utils.DateUtils;
 import com.ruoyi.common.core.web.domain.AjaxResult;
 import com.ruoyi.common.security.utils.SecurityUtils;
+import com.ruoyi.news.domain.model.ArticleEO;
+import com.ruoyi.news.mapper.es.ArticleEOMapper;
 import com.ruoyi.news.util.enums.*;
 import com.ruoyi.news.util.UuidUtil;
 import com.ruoyi.news.util.result.ResponseStatusEnum;
 import com.ruoyi.system.api.domain.SysUser;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.news.mapper.ChuArticleMapper;
@@ -28,6 +31,8 @@ public class ChuArticleServiceImpl implements IChuArticleService
     @Autowired
     private ChuArticleMapper chuArticleMapper;
 
+    @Autowired
+    private ArticleEOMapper articleEOMapper;
     /**
      * 查询文章资讯
      * 
@@ -75,12 +80,13 @@ public class ChuArticleServiceImpl implements IChuArticleService
         chuArticle.setUpdateTime(new Date());
         chuArticle.setUpdateTime(new Date());
         chuArticle.setPublishUserId(sysUser.getUserId()+"");
-        if (chuArticle.getIsAppoint() == ArticleAppointType.TIMING.type) {
-            chuArticle.setPublishTime(chuArticle.getPublishTime());
-        } else if (chuArticle.getIsAppoint() == ArticleAppointType.IMMEDIATELY.type) {
-            chuArticle.setPublishTime(new Date());
-        }
+        chuArticle.setPublishTime(new Date());
 
+
+        ArticleEO articleEO = new ArticleEO();
+        BeanUtils.copyProperties(chuArticle, articleEO);
+        int success = articleEOMapper.insert(articleEO);
+        System.out.println(success);
         return chuArticleMapper.insertChuArticle(chuArticle);
     }
 
