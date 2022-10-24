@@ -1,5 +1,6 @@
 package com.ruoyi.news;
 
+import cn.easyes.starter.register.EsMapperScan;
 import com.ruoyi.common.security.annotation.EnableCustomConfig;
 import com.ruoyi.common.security.annotation.EnableRyFeignClients;
 import com.ruoyi.common.swagger.annotation.EnableCustomSwagger2;
@@ -11,6 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * 
  * @author ruoyi
  */
+@EsMapperScan("com.ruoyi.news.mapper.es")
 @EnableCustomConfig
 @EnableCustomSwagger2
 @EnableRyFeignClients
