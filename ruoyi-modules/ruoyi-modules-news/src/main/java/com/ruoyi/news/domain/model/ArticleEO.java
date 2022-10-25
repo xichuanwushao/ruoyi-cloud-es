@@ -1,6 +1,9 @@
 package com.ruoyi.news.domain.model;
 
 import cn.easyes.annotation.HighLight;
+import cn.easyes.annotation.IndexField;
+import cn.easyes.common.constants.Analyzer;
+import cn.easyes.common.enums.FieldType;
 
 import java.util.Date;
 
@@ -9,7 +12,8 @@ public class ArticleEO {
     /**
      * 需要被高亮的字段
      */
-    @HighLight(mappingField = "highlightTitle" )
+    @HighLight(mappingField = "highlightTitle", fragmentSize = 2,preTag = "<b style=\"color:red\">" ,postTag = "</b>")
+    @IndexField(fieldType = FieldType.TEXT, analyzer = Analyzer.IK_SMART, searchAnalyzer = Analyzer.IK_SMART)
     private String title;
 
     private Integer categoryId;
