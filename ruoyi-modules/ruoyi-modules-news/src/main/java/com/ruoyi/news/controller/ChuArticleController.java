@@ -9,6 +9,7 @@ import cn.easyes.core.conditions.LambdaEsQueryWrapper;
 import com.ruoyi.common.core.web.page.PageDomain;
 import com.ruoyi.common.core.web.page.TableSupport;
 import com.ruoyi.news.domain.model.ArticleEO;
+import com.ruoyi.news.domain.model.Document;
 import com.ruoyi.news.mapper.es.ArticleEOMapper;
 import com.ruoyi.news.util.enums.ArticleCoverType;
 import com.ruoyi.news.util.result.ResponseStatusEnum;
@@ -70,7 +71,6 @@ public class ChuArticleController extends BaseController
     @GetMapping("/es/list")
     public TableDataInfo eslist(ChuArticle chuArticle)
     {
-
         PageDomain pageDomain = TableSupport.buildPageRequest();
         Integer pageNum = pageDomain.getPageNum();
         Integer pageSize = pageDomain.getPageSize();
@@ -78,10 +78,10 @@ public class ChuArticleController extends BaseController
         if(chuArticle.getTitle()!=null){
             wrapper.match(ArticleEO::getTitle, chuArticle.getTitle());
         }
-        PageInfo<ArticleEO> documentPageInfo = articleEOMapper.pageQuery(wrapper,pageNum,pageSize);
-//        documentPageInfo.getList()
-        List<ArticleEO> list = documentPageInfo.getList();
-        return getDataTable(list);
+        List<ArticleEO> articleEOList = articleEOMapper.selectList(wrapper);
+//        PageInfo<ArticleEO> documentPageInfo = articleEOMapper.pageQuery(wrapper,pageNum,pageSize);
+//        List<ArticleEO> list = documentPageInfo.getList();
+        return getDataTable(articleEOList);
     }
 
     /**

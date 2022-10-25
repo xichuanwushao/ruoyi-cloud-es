@@ -2,11 +2,12 @@ package com.ruoyi.news.domain.model;
 
 import cn.easyes.annotation.HighLight;
 import cn.easyes.annotation.IndexField;
+import cn.easyes.annotation.IndexName;
 import cn.easyes.common.constants.Analyzer;
 import cn.easyes.common.enums.FieldType;
 
 import java.util.Date;
-
+@IndexName(value = "article")
 public class ArticleEO {
     private String id;
     /**
