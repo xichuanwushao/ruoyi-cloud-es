@@ -4,7 +4,11 @@ package com.ruoyi.news.domain.model;
  * @author : wuxiao
  * @date : 15:56 2022/10/20
  */
-public class Document {
+
+import cn.easyes.annotation.IndexName;
+
+@IndexName(value = "documentlow")
+public class DocumentLow {
 
     /**
      * es中的唯一id

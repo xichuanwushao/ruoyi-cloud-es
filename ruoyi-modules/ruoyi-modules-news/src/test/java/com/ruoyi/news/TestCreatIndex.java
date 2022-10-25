@@ -1,8 +1,8 @@
 package com.ruoyi.news;
 
 import cn.easyes.core.conditions.LambdaEsQueryWrapper;
-import com.ruoyi.news.domain.model.Document;
-import com.ruoyi.news.mapper.es.DocumentMapper;
+import com.ruoyi.news.domain.model.DocumentLow;
+import com.ruoyi.news.mapper.es.DocumentLowMapper;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 
@@ -15,12 +15,12 @@ import javax.annotation.Resource;
 public class TestCreatIndex extends RuoYiNewsApplicationTest {
 
     @Resource
-    private DocumentMapper documentMapper;
+    private DocumentLowMapper documentMapper;
 
     @Test
     public void testInsert() {
         // 测试插入数据
-        Document document = new Document();
+        DocumentLow document = new DocumentLow();
         document.setTitle("老汉");
         document.setContent("推*技术过硬");
         int successCount = documentMapper.insert(document);
@@ -31,9 +31,9 @@ public class TestCreatIndex extends RuoYiNewsApplicationTest {
     public void testSelect() {
         // 测试查询
         String title = "老汉";
-        LambdaEsQueryWrapper<Document> wrapper = new LambdaEsQueryWrapper<>();
-        wrapper.eq(Document::getTitle,title);
-        Document document = documentMapper.selectOne(wrapper);
+        LambdaEsQueryWrapper<DocumentLow> wrapper = new LambdaEsQueryWrapper<>();
+        wrapper.eq(DocumentLow::getTitle,title);
+        DocumentLow document = documentMapper.selectOne(wrapper);
         System.out.println(document);
     }
 
@@ -44,7 +44,7 @@ public class TestCreatIndex extends RuoYiNewsApplicationTest {
         // case1: 已知id, 根据id更新 (为了演示方便,此id是从上一步查询中复制过来的,实际业务可以自行查询)
         String id = "7MDJCYQBwa42pJMaporN";
         String title1 = "隔壁老刘";
-        Document document1 = new Document();
+        DocumentLow document1 = new DocumentLow();
         document1.setId(id);
         document1.setTitle(title1);
         document1.setContent("机器人审核");
@@ -65,8 +65,9 @@ public class TestCreatIndex extends RuoYiNewsApplicationTest {
     public void testDeleteIndex() {
         // 测试删除索引
         // 指定要删除哪个索引
-        String indexName = Document.class.getSimpleName().toLowerCase();
-        boolean isOk = documentMapper.deleteIndex(indexName);
+//        String indexName = DocumentLow.class.getSimpleName().toLowerCase();
+//        System.out.println(indexName);
+        boolean isOk = documentMapper.deleteIndex("document");
         Assertions.assertTrue(isOk);
     }
 }
