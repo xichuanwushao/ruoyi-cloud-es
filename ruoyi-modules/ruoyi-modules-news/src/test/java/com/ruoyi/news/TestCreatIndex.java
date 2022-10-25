@@ -2,10 +2,12 @@ package com.ruoyi.news;
 
 import cn.easyes.core.conditions.LambdaEsQueryWrapper;
 import com.ruoyi.news.domain.model.DocumentLow;
+import com.ruoyi.news.mapper.es.ArticleEOMapper;
 import com.ruoyi.news.mapper.es.DocumentLowMapper;
 import com.ruoyi.news.mapper.es.DocumentMapper;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Resource;
 
@@ -81,6 +83,20 @@ public class TestCreatIndex extends RuoYiNewsApplicationTest {
 //        String indexName = DocumentLow.class.getSimpleName().toLowerCase();
 //        System.out.println(indexName);
         boolean isOk = documentMapper.deleteIndex("easyes_document");
+        Assertions.assertTrue(isOk);
+    }
+
+    @Autowired
+    private ArticleEOMapper articleEOMapper;
+
+
+    @Test
+    public void testaDeleteIndex() {
+        // 测试删除索引
+        // 指定要删除哪个索引
+//        String indexName = DocumentLow.class.getSimpleName().toLowerCase();
+//        System.out.println(indexName);
+        boolean isOk = articleEOMapper.deleteIndex("easyes_document");
         Assertions.assertTrue(isOk);
     }
 }
