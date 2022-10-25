@@ -75,7 +75,9 @@ public class ChuArticleController extends BaseController
         Integer pageNum = pageDomain.getPageNum();
         Integer pageSize = pageDomain.getPageSize();
         LambdaEsQueryWrapper<ArticleEO> wrapper = new LambdaEsQueryWrapper<>();
-//        wrapper.match(Document::getTitle, "老汉");
+        if(chuArticle.getTitle()!=null){
+            wrapper.match(ArticleEO::getTitle, chuArticle.getTitle());
+        }
         PageInfo<ArticleEO> documentPageInfo = articleEOMapper.pageQuery(wrapper,pageNum,pageSize);
 //        documentPageInfo.getList()
         List<ArticleEO> list = documentPageInfo.getList();

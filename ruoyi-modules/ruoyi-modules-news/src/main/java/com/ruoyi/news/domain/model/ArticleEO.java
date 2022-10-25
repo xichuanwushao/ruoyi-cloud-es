@@ -1,12 +1,15 @@
 package com.ruoyi.news.domain.model;
 
-import org.springframework.data.annotation.Id;
+import cn.easyes.annotation.HighLight;
 
 import java.util.Date;
 
 public class ArticleEO {
     private String id;
-
+    /**
+     * 需要被高亮的字段
+     */
+    @HighLight(mappingField = "highlightTitle" )
     private String title;
 
     private Integer categoryId;
@@ -18,6 +21,19 @@ public class ArticleEO {
     private String publishUserId;
 
     private Date publishTime;
+
+    /**
+     * 高亮返回值被映射的字段
+     */
+    private String highlightTitle;
+
+    public String getHighlightTitle() {
+        return highlightTitle;
+    }
+
+    public void setHighlightTitle(String highlightTitle) {
+        this.highlightTitle = highlightTitle;
+    }
 
     public String getId() {
         return id;
