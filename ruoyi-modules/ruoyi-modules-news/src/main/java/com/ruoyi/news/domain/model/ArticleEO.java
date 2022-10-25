@@ -2,13 +2,16 @@ package com.ruoyi.news.domain.model;
 
 import cn.easyes.annotation.HighLight;
 import cn.easyes.annotation.IndexField;
+import cn.easyes.annotation.IndexId;
 import cn.easyes.annotation.IndexName;
 import cn.easyes.common.constants.Analyzer;
 import cn.easyes.common.enums.FieldType;
+import cn.easyes.common.enums.IdType;
 
 import java.util.Date;
 @IndexName(value = "article")
 public class ArticleEO {
+    @IndexId(type = IdType.CUSTOMIZE)
     private String id;
     /**
      * 需要被高亮的字段

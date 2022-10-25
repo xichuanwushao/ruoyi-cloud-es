@@ -91,6 +91,7 @@ public class ChuArticleServiceImpl implements IChuArticleService
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         BeanUtils.copyProperties(chuArticle, articleEO);
         articleEO.setPublishTime( simpleDateFormat.format(chuArticle.getPublishTime()));
+        articleEO.setId(chuArticle.getId());
         int success = articleEOMapper.insert(articleEO);
         System.out.println(success);
         return chuArticleMapper.insertChuArticle(chuArticle);
