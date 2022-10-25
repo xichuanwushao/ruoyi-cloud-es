@@ -107,6 +107,12 @@ public class ChuArticleServiceImpl implements IChuArticleService
     public int updateChuArticle(ChuArticle chuArticle)
     {
         chuArticle.setUpdateTime(DateUtils.getNowDate());
+
+        ArticleEO articleEO = new ArticleEO();
+        BeanUtils.copyProperties(chuArticle, articleEO);
+        articleEO.setId(chuArticle.getId());
+
+        int count = articleEOMapper.updateById(articleEO);
         return chuArticleMapper.updateChuArticle(chuArticle);
     }
 
