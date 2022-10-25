@@ -1,5 +1,8 @@
 package com.ruoyi.news.service.impl;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import com.ruoyi.common.core.utils.DateUtils;
@@ -81,10 +84,13 @@ public class ChuArticleServiceImpl implements IChuArticleService
         chuArticle.setUpdateTime(new Date());
         chuArticle.setPublishUserId(sysUser.getUserId()+"");
         chuArticle.setPublishTime(new Date());
+        chuArticle.setCreateTime(new Date());
 
 
         ArticleEO articleEO = new ArticleEO();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         BeanUtils.copyProperties(chuArticle, articleEO);
+        articleEO.setPublishTime( simpleDateFormat.format(chuArticle.getPublishTime()));
         int success = articleEOMapper.insert(articleEO);
         System.out.println(success);
         return chuArticleMapper.insertChuArticle(chuArticle);

@@ -24,8 +24,8 @@ public class ArticleEO {
     private String articleCover;
 
     private String publishUserId;
-
-    private Date publishTime;
+    @IndexField(fieldType = FieldType.DATE, dateFormat = "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis")
+    private String publishTime;
 
     /**
      * 高亮返回值被映射的字段
@@ -88,11 +88,11 @@ public class ArticleEO {
         this.publishUserId = publishUserId;
     }
 
-    public Date getPublishTime() {
+    public String getPublishTime() {
         return publishTime;
     }
 
-    public void setPublishTime(Date publishTime) {
+    public void setPublishTime(String publishTime) {
         this.publishTime = publishTime;
     }
 

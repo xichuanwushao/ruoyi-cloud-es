@@ -73,7 +73,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="文章的创建时间" align="center" prop="createTime" />
+      <el-table-column label="文章的创建时间" align="center" prop="publishTime" />
       <el-table-column label="封面图" align="center" prop="articleCover" width="100">
         <template slot-scope="scope">
           <image-preview :src="scope.row.articleCover" :width="50" :height="50"/>
