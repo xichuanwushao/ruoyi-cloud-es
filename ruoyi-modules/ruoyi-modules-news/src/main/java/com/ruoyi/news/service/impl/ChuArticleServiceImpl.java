@@ -3,6 +3,7 @@ package com.ruoyi.news.service.impl;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import com.ruoyi.common.core.utils.DateUtils;
@@ -72,8 +73,6 @@ public class ChuArticleServiceImpl implements IChuArticleService
         SysUser sysUser = SecurityUtils.getLoginUser().getSysUser();
         chuArticle.setId(UuidUtil.getShortUuid());
         chuArticle.setCreateTime(DateUtils.getNowDate());
-
-
         chuArticle.setArticleType(1);
         chuArticle.setIsAppoint(0);
         chuArticle.setArticleStatus(ArticleReviewStatus.REVIEWING.type);
@@ -84,16 +83,15 @@ public class ChuArticleServiceImpl implements IChuArticleService
         chuArticle.setUpdateTime(new Date());
         chuArticle.setPublishUserId(sysUser.getUserId()+"");
         chuArticle.setPublishTime(new Date());
-        chuArticle.setCreateTime(new Date());
 
-
+        //同时将数据新增到es中
         ArticleEO articleEO = new ArticleEO();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         BeanUtils.copyProperties(chuArticle, articleEO);
         articleEO.setPublishTime( simpleDateFormat.format(chuArticle.getPublishTime()));
         articleEO.setId(chuArticle.getId());
         int success = articleEOMapper.insert(articleEO);
-        System.out.println(success);
+
         return chuArticleMapper.insertChuArticle(chuArticle);
     }
 
@@ -107,12 +105,12 @@ public class ChuArticleServiceImpl implements IChuArticleService
     public int updateChuArticle(ChuArticle chuArticle)
     {
         chuArticle.setUpdateTime(DateUtils.getNowDate());
-
+        //同时修改es中的数据
         ArticleEO articleEO = new ArticleEO();
         BeanUtils.copyProperties(chuArticle, articleEO);
         articleEO.setId(chuArticle.getId());
-
         int count = articleEOMapper.updateById(articleEO);
+
         return chuArticleMapper.updateChuArticle(chuArticle);
     }
 
@@ -125,6 +123,10 @@ public class ChuArticleServiceImpl implements IChuArticleService
     @Override
     public int deleteChuArticleByIds(String[] ids)
     {
+        //同时删除es中的数据
+        List<String> idList = Arrays.asList(ids);
+        int count = articleEOMapper.deleteBatchIds(idList);
+
         return chuArticleMapper.deleteChuArticleByIds(ids);
     }
 

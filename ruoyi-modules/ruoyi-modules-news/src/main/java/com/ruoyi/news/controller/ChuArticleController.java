@@ -1,5 +1,6 @@
 package com.ruoyi.news.controller;
 
+import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
@@ -76,9 +77,11 @@ public class ChuArticleController extends BaseController
         Integer pageSize = pageDomain.getPageSize();
         LambdaEsQueryWrapper<ArticleEO> wrapper = new LambdaEsQueryWrapper<>();
         if(chuArticle.getTitle()!=null){
+            //对标题命中文字进行高亮显示
             wrapper.match(ArticleEO::getTitle, chuArticle.getTitle());
         }
-//      List<ArticleEO> articleEOList = articleEOMapper.selectList(wrapper);
+        //List<ArticleEO> articleEOList = articleEOMapper.selectList(wrapper);
+        //进行分页查询
         PageInfo<ArticleEO> documentPageInfo = articleEOMapper.pageQuery(wrapper,pageNum,pageSize);
         List<ArticleEO> articleEOList = documentPageInfo.getList();
         return getDataTable(articleEOList);
