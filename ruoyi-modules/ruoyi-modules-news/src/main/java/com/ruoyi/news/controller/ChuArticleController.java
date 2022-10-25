@@ -78,9 +78,9 @@ public class ChuArticleController extends BaseController
         if(chuArticle.getTitle()!=null){
             wrapper.match(ArticleEO::getTitle, chuArticle.getTitle());
         }
-        List<ArticleEO> articleEOList = articleEOMapper.selectList(wrapper);
-//        PageInfo<ArticleEO> documentPageInfo = articleEOMapper.pageQuery(wrapper,pageNum,pageSize);
-//        List<ArticleEO> list = documentPageInfo.getList();
+//      List<ArticleEO> articleEOList = articleEOMapper.selectList(wrapper);
+        PageInfo<ArticleEO> documentPageInfo = articleEOMapper.pageQuery(wrapper,pageNum,pageSize);
+        List<ArticleEO> articleEOList = documentPageInfo.getList();
         return getDataTable(articleEOList);
     }
 
