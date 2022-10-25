@@ -13,7 +13,7 @@ public class ArticleEO {
     /**
      * 需要被高亮的字段
      */
-    @HighLight(mappingField = "highlightTitle", fragmentSize = 2,preTag = "<b style=\"color:red\">" ,postTag = "</b>")
+    @HighLight(mappingField = "highlightTitle",preTag = "<b style=\"color:red\">" ,postTag = "</b>")
     @IndexField(fieldType = FieldType.TEXT, analyzer = Analyzer.IK_SMART, searchAnalyzer = Analyzer.IK_SMART)
     private String title;
 

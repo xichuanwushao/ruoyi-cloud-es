@@ -63,13 +63,17 @@
 
     <el-table v-loading="loading" :data="articleList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="文章标题" align="center" prop="title" />
-      <el-table-column label="文章的创建时间" align="center" prop="createTime" width="180">
+      <el-table-column label="文章标题" align="center"  width="180">
         <template slot-scope="scope">
-<!--          <span>{{ scope.row.title}}</span>-->
-          <span v-html="scope.row.title"></span>
+          <div v-if="scope.row.highlightTitle==null">
+            <span v-html="scope.row.title"></span>
+          </div>
+          <div v-else>
+            <span v-html="scope.row.highlightTitle"></span>
+          </div>
         </template>
       </el-table-column>
+      <el-table-column label="文章的创建时间" align="center" prop="createTime" />
       <el-table-column label="封面图" align="center" prop="articleCover" width="100">
         <template slot-scope="scope">
           <image-preview :src="scope.row.articleCover" :width="50" :height="50"/>
