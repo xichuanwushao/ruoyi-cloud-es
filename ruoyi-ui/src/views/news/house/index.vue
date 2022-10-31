@@ -263,7 +263,7 @@
           <dict-tag :options="dict.type.house_status" :value="scope.row.status"/>
         </template>
       </el-table-column>
-      <el-table-column label="最近数据更新时间" align="center" prop="lastUpdateTime" width="180">
+      <el-table-column label="更新时间" align="center" prop="lastUpdateTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.lastUpdateTime, '{y}-{m}-{d}') }}</span>
         </template>
@@ -360,8 +360,8 @@
             placeholder="请选择建立年限">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="房屋状态 0-未审核 1-审核通过 2-已出租 3-逻辑删除" prop="status">
-          <el-select v-model="form.status" placeholder="请选择房屋状态 0-未审核 1-审核通过 2-已出租 3-逻辑删除">
+        <el-form-item label="房屋状态" prop="status">
+          <el-select v-model="form.status" placeholder="请选择房屋状态">
             <el-option
               v-for="dict in dict.type.house_status"
               :key="dict.value"
@@ -370,16 +370,16 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="最近数据更新时间" prop="lastUpdateTime">
+        <el-form-item label="更新时间" prop="lastUpdateTime">
           <el-date-picker clearable
             v-model="form.lastUpdateTime"
             type="date"
             value-format="yyyy-MM-dd"
-            placeholder="请选择最近数据更新时间">
+            placeholder="请选择更新时间">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="城市标记缩写 如 北京bj" prop="cityEnName">
-          <el-select v-model="form.cityEnName" placeholder="请选择城市标记缩写 如 北京bj">
+        <el-form-item label="城市" prop="cityEnName">
+          <el-select v-model="form.cityEnName" placeholder="请选择城市">
             <el-option
               v-for="dict in dict.type.city_en_name"
               :key="dict.value"
@@ -388,8 +388,8 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="地区英文简写 如昌平区 cpq" prop="regionEnName">
-          <el-select v-model="form.regionEnName" placeholder="请选择地区英文简写 如昌平区 cpq">
+        <el-form-item label="地区" prop="regionEnName">
+          <el-select v-model="form.regionEnName" placeholder="请选择地区">
             <el-option
               v-for="dict in dict.type.region_en_name"
               :key="dict.value"
@@ -411,8 +411,8 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="距地铁距离 默认-1 附近无地铁" prop="distanceToSubway">
-          <el-input v-model="form.distanceToSubway" placeholder="请输入距地铁距离 默认-1 附近无地铁" />
+        <el-form-item label="地铁距离" prop="distanceToSubway">
+          <el-input v-model="form.distanceToSubway" placeholder="请输入地铁距离" />
         </el-form-item>
         <el-form-item label="客厅数量" prop="parlour">
           <el-input v-model="form.parlour" placeholder="请输入客厅数量" />
@@ -420,9 +420,9 @@
         <el-form-item label="所在小区" prop="district">
           <el-input v-model="form.district" placeholder="请输入所在小区" />
         </el-form-item>
-        <el-form-item label="所属管理员id" prop="adminId">
-          <el-input v-model="form.adminId" placeholder="请输入所属管理员id" />
-        </el-form-item>
+<!--        <el-form-item label="管理员" prop="adminId">-->
+<!--          <el-input v-model="form.adminId" placeholder="请输入管理员" />-->
+<!--        </el-form-item>-->
         <el-form-item label="浴室数量" prop="bathroom">
           <el-input v-model="form.bathroom" placeholder="请输入浴室数量" />
         </el-form-item>
