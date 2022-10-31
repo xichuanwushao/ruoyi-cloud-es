@@ -239,7 +239,13 @@
 
     <el-table v-loading="loading" :data="houseList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="house唯一标识" align="center" prop="id" />
+<!--      <el-table-column label="house唯一标识" align="center" prop="id" />-->
+      <el-table-column
+        type="index"
+        label="序号"
+        width="50"
+        :index="(i) => (queryParams.pageNum - 1) * queryParams.pageSize + i + 1"
+      />
       <el-table-column label="标题" align="center" prop="title" />
       <el-table-column label="价格" align="center" prop="price" />
       <el-table-column label="面积" align="center" prop="area" />
@@ -252,7 +258,7 @@
           <span>{{ parseTime(scope.row.buildYear, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="房屋状态 0-未审核 1-审核通过 2-已出租 3-逻辑删除" align="center" prop="status">
+      <el-table-column label="房屋状态" align="center" prop="status">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.house_status" :value="scope.row.status"/>
         </template>
@@ -262,12 +268,12 @@
           <span>{{ parseTime(scope.row.lastUpdateTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="城市标记缩写 如 北京bj" align="center" prop="cityEnName">
+      <el-table-column label="城市" align="center" prop="cityEnName">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.city_en_name" :value="scope.row.cityEnName"/>
         </template>
       </el-table-column>
-      <el-table-column label="地区英文简写 如昌平区 cpq" align="center" prop="regionEnName">
+      <el-table-column label="地区" align="center" prop="regionEnName">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.region_en_name" :value="scope.row.regionEnName"/>
         </template>
@@ -278,10 +284,10 @@
           <dict-tag :options="dict.type.direction" :value="scope.row.direction"/>
         </template>
       </el-table-column>
-      <el-table-column label="距地铁距离 默认-1 附近无地铁" align="center" prop="distanceToSubway" />
+      <el-table-column label="地铁距离" align="center" prop="distanceToSubway" />
       <el-table-column label="客厅数量" align="center" prop="parlour" />
       <el-table-column label="所在小区" align="center" prop="district" />
-      <el-table-column label="所属管理员id" align="center" prop="adminId" />
+<!--      <el-table-column label="所属管理员id" align="center" prop="adminId" />-->
       <el-table-column label="浴室数量" align="center" prop="bathroom" />
       <el-table-column label="街道" align="center" prop="street" />
       <el-table-column label="房间图片" align="center" prop="housePicture" width="100">
