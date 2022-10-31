@@ -253,11 +253,12 @@
 <!--      <el-table-column label="楼层" align="center" prop="floor" />-->
 <!--      <el-table-column label="总楼层" align="center" prop="totalFloor" />-->
       <el-table-column label="被看次数" align="center" prop="watchTimes" />
-      <el-table-column label="建立年限" align="center" prop="buildYear" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.buildYear, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
+      <el-table-column label="建立年限" align="center" prop="buildYear" />
+<!--      <el-table-column label="建立年限" align="center" prop="buildYear" width="180">-->
+<!--        <template slot-scope="scope">-->
+<!--          <span>{{ parseTime(scope.row.buildYear, '{y}-{m}-{d}') }}</span>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
       <el-table-column label="房屋状态" align="center" prop="status">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.house_status" :value="scope.row.status"/>
@@ -353,13 +354,16 @@
           <el-input v-model="form.watchTimes" placeholder="请输入被看次数" />
         </el-form-item>
         <el-form-item label="建立年限" prop="buildYear">
-          <el-date-picker clearable
-            v-model="form.buildYear"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择建立年限">
-          </el-date-picker>
+          <el-input v-model="form.buildYear" placeholder="请输入建立年限" />
         </el-form-item>
+<!--        <el-form-item label="建立年限" prop="buildYear">-->
+<!--          <el-date-picker clearable-->
+<!--            v-model="form.buildYear"-->
+<!--            type="date"-->
+<!--            value-format="yyyy-MM-dd"-->
+<!--            placeholder="请选择建立年限">-->
+<!--          </el-date-picker>-->
+<!--        </el-form-item>-->
         <el-form-item label="房屋状态" prop="status">
           <el-select v-model="form.status" placeholder="请选择房屋状态">
             <el-option
