@@ -58,12 +58,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectHouseVo"/>
         <where>  
             <if test="title != null  and title != ''"> and title = #{title}</if>
-            <if test="price != null "> and price = #{price}</if>
-            <if test="area != null "> and area = #{area}</if>
-            <if test="room != null "> and room = #{room}</if>
-            <if test="floor != null "> and floor = #{floor}</if>
-            <if test="totalFloor != null "> and total_floor = #{totalFloor}</if>
-            <if test="watchTimes != null "> and watch_times = #{watchTimes}</if>
+            <if test="price != null "> and price &gt;= #{price}</if>
+            <if test="area != null "> and area &gt;= #{area}</if>
+            <if test="room != null "> and room &gt;= #{room}</if>
+            <if test="floor != null "> and floor &gt;= #{floor}</if>
+            <if test="totalFloor != null "> and total_floor &gt;= #{totalFloor}</if>
+            <if test="watchTimes != null "> and watch_times &gt;= #{watchTimes}</if>
             <if test="params.beginBuildYear != null and params.beginBuildYear != '' and params.endBuildYear != null and params.endBuildYear != ''"> and build_year between #{params.beginBuildYear} and #{params.endBuildYear}</if>
             <if test="status != null "> and status = #{status}</if>
             <if test="params.beginLastUpdateTime != null and params.beginLastUpdateTime != '' and params.endLastUpdateTime != null and params.endLastUpdateTime != ''"> and last_update_time between #{params.beginLastUpdateTime} and #{params.endLastUpdateTime}</if>
@@ -71,11 +71,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="regionEnName != null  and regionEnName != ''"> and region_en_name = #{regionEnName}</if>
             <if test="cover != null  and cover != ''"> and cover = #{cover}</if>
             <if test="direction != null "> and direction = #{direction}</if>
-            <if test="distanceToSubway != null "> and distance_to_subway = #{distanceToSubway}</if>
-            <if test="parlour != null "> and parlour = #{parlour}</if>
+            <if test="distanceToSubway != null "> and distance_to_subway &gt;= #{distanceToSubway}</if>
+            <if test="parlour != null "> and parlour &lt;= #{parlour}</if>
             <if test="district != null  and district != ''"> and district = #{district}</if>
             <if test="adminId != null "> and admin_id = #{adminId}</if>
-            <if test="bathroom != null "> and bathroom = #{bathroom}</if>
+            <if test="bathroom != null "> and bathroom &lt;= #{bathroom}</if>
             <if test="street != null  and street != ''"> and street = #{street}</if>
             <if test="housePicture != null  and housePicture != ''"> and house_picture = #{housePicture}</if>
             <if test="houseTag != null  and houseTag != ''"> and house_tag = #{houseTag}</if>
