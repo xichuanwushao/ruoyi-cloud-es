@@ -69,7 +69,7 @@
         ></el-date-picker>
       </el-form-item>
       <el-form-item label="房屋状态" prop="status">
-        <el-select v-model="queryParams.status" placeholder="请选择房屋状态 0-未审核 1-审核通过 2-已出租 3-逻辑删除" clearable>
+        <el-select v-model="queryParams.status" placeholder="请选择房屋状态" clearable>
           <el-option
             v-for="dict in dict.type.house_status"
             :key="dict.value"
