@@ -9,54 +9,54 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="价格" prop="price">
-        <el-input
-          v-model="queryParams.price"
-          placeholder="请输入价格"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="面积" prop="area">
-        <el-input
-          v-model="queryParams.area"
-          placeholder="请输入面积"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="卧室数量" prop="room">
-        <el-input
-          v-model="queryParams.room"
-          placeholder="请输入卧室数量"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="楼层" prop="floor">
-        <el-input
-          v-model="queryParams.floor"
-          placeholder="请输入楼层"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="总楼层" prop="totalFloor">
-        <el-input
-          v-model="queryParams.totalFloor"
-          placeholder="请输入总楼层"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="被看次数" prop="watchTimes">
-        <el-input
-          v-model="queryParams.watchTimes"
-          placeholder="请输入被看次数"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+<!--      <el-form-item label="价格" prop="price">-->
+<!--        <el-input-->
+<!--          v-model="queryParams.price"-->
+<!--          placeholder="请输入价格"-->
+<!--          clearable-->
+<!--          @keyup.enter.native="handleQuery"-->
+<!--        />-->
+<!--      </el-form-item>-->
+<!--      <el-form-item label="面积" prop="area">-->
+<!--        <el-input-->
+<!--          v-model="queryParams.area"-->
+<!--          placeholder="请输入面积"-->
+<!--          clearable-->
+<!--          @keyup.enter.native="handleQuery"-->
+<!--        />-->
+<!--      </el-form-item>-->
+<!--      <el-form-item label="卧室数量" prop="room">-->
+<!--        <el-input-->
+<!--          v-model="queryParams.room"-->
+<!--          placeholder="请输入卧室数量"-->
+<!--          clearable-->
+<!--          @keyup.enter.native="handleQuery"-->
+<!--        />-->
+<!--      </el-form-item>-->
+<!--      <el-form-item label="楼层" prop="floor">-->
+<!--        <el-input-->
+<!--          v-model="queryParams.floor"-->
+<!--          placeholder="请输入楼层"-->
+<!--          clearable-->
+<!--          @keyup.enter.native="handleQuery"-->
+<!--        />-->
+<!--      </el-form-item>-->
+<!--      <el-form-item label="总楼层" prop="totalFloor">-->
+<!--        <el-input-->
+<!--          v-model="queryParams.totalFloor"-->
+<!--          placeholder="请输入总楼层"-->
+<!--          clearable-->
+<!--          @keyup.enter.native="handleQuery"-->
+<!--        />-->
+<!--      </el-form-item>-->
+<!--      <el-form-item label="被看次数" prop="watchTimes">-->
+<!--        <el-input-->
+<!--          v-model="queryParams.watchTimes"-->
+<!--          placeholder="请输入被看次数"-->
+<!--          clearable-->
+<!--          @keyup.enter.native="handleQuery"-->
+<!--        />-->
+<!--      </el-form-item>-->
       <el-form-item label="建立年限">
         <el-date-picker
           v-model="daterangeBuildYear"
@@ -68,7 +68,7 @@
           end-placeholder="结束日期"
         ></el-date-picker>
       </el-form-item>
-      <el-form-item label="房屋状态 0-未审核 1-审核通过 2-已出租 3-逻辑删除" prop="status">
+      <el-form-item label="房屋状态" prop="status">
         <el-select v-model="queryParams.status" placeholder="请选择房屋状态 0-未审核 1-审核通过 2-已出租 3-逻辑删除" clearable>
           <el-option
             v-for="dict in dict.type.house_status"
@@ -78,19 +78,19 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="最近数据更新时间">
-        <el-date-picker
-          v-model="daterangeLastUpdateTime"
-          style="width: 240px"
-          value-format="yyyy-MM-dd"
-          type="daterange"
-          range-separator="-"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-        ></el-date-picker>
-      </el-form-item>
-      <el-form-item label="城市标记缩写 如 北京bj" prop="cityEnName">
-        <el-select v-model="queryParams.cityEnName" placeholder="请选择城市标记缩写 如 北京bj" clearable>
+<!--      <el-form-item label="最近数据更新时间">-->
+<!--        <el-date-picker-->
+<!--          v-model="daterangeLastUpdateTime"-->
+<!--          style="width: 240px"-->
+<!--          value-format="yyyy-MM-dd"-->
+<!--          type="daterange"-->
+<!--          range-separator="-"-->
+<!--          start-placeholder="开始日期"-->
+<!--          end-placeholder="结束日期"-->
+<!--        ></el-date-picker>-->
+<!--      </el-form-item>-->
+      <el-form-item label="城市" prop="cityEnName">
+        <el-select v-model="queryParams.cityEnName" placeholder="请选择城市" clearable>
           <el-option
             v-for="dict in dict.type.city_en_name"
             :key="dict.value"
@@ -99,8 +99,8 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="地区英文简写 如昌平区 cpq" prop="regionEnName">
-        <el-select v-model="queryParams.regionEnName" placeholder="请选择地区英文简写 如昌平区 cpq" clearable>
+      <el-form-item label="地区" prop="regionEnName">
+        <el-select v-model="queryParams.regionEnName" placeholder="请选择地区" clearable>
           <el-option
             v-for="dict in dict.type.region_en_name"
             :key="dict.value"
@@ -109,14 +109,14 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="封面" prop="cover">
-        <el-input
-          v-model="queryParams.cover"
-          placeholder="请输入封面"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+<!--      <el-form-item label="封面" prop="cover">-->
+<!--        <el-input-->
+<!--          v-model="queryParams.cover"-->
+<!--          placeholder="请输入封面"-->
+<!--          clearable-->
+<!--          @keyup.enter.native="handleQuery"-->
+<!--        />-->
+<!--      </el-form-item>-->
       <el-form-item label="房屋朝向" prop="direction">
         <el-select v-model="queryParams.direction" placeholder="请选择房屋朝向" clearable>
           <el-option
@@ -127,54 +127,54 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="距地铁距离 默认-1 附近无地铁" prop="distanceToSubway">
-        <el-input
-          v-model="queryParams.distanceToSubway"
-          placeholder="请输入距地铁距离 默认-1 附近无地铁"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="客厅数量" prop="parlour">
-        <el-input
-          v-model="queryParams.parlour"
-          placeholder="请输入客厅数量"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="所在小区" prop="district">
-        <el-input
-          v-model="queryParams.district"
-          placeholder="请输入所在小区"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="所属管理员id" prop="adminId">
-        <el-input
-          v-model="queryParams.adminId"
-          placeholder="请输入所属管理员id"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="浴室数量" prop="bathroom">
-        <el-input
-          v-model="queryParams.bathroom"
-          placeholder="请输入浴室数量"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="街道" prop="street">
-        <el-input
-          v-model="queryParams.street"
-          placeholder="请输入街道"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+<!--      <el-form-item label="距地铁距离 默认-1 附近无地铁" prop="distanceToSubway">-->
+<!--        <el-input-->
+<!--          v-model="queryParams.distanceToSubway"-->
+<!--          placeholder="请输入距地铁距离 默认-1 附近无地铁"-->
+<!--          clearable-->
+<!--          @keyup.enter.native="handleQuery"-->
+<!--        />-->
+<!--      </el-form-item>-->
+<!--      <el-form-item label="客厅数量" prop="parlour">-->
+<!--        <el-input-->
+<!--          v-model="queryParams.parlour"-->
+<!--          placeholder="请输入客厅数量"-->
+<!--          clearable-->
+<!--          @keyup.enter.native="handleQuery"-->
+<!--        />-->
+<!--      </el-form-item>-->
+<!--      <el-form-item label="所在小区" prop="district">-->
+<!--        <el-input-->
+<!--          v-model="queryParams.district"-->
+<!--          placeholder="请输入所在小区"-->
+<!--          clearable-->
+<!--          @keyup.enter.native="handleQuery"-->
+<!--        />-->
+<!--      </el-form-item>-->
+<!--      <el-form-item label="所属管理员id" prop="adminId">-->
+<!--        <el-input-->
+<!--          v-model="queryParams.adminId"-->
+<!--          placeholder="请输入所属管理员id"-->
+<!--          clearable-->
+<!--          @keyup.enter.native="handleQuery"-->
+<!--        />-->
+<!--      </el-form-item>-->
+<!--      <el-form-item label="浴室数量" prop="bathroom">-->
+<!--        <el-input-->
+<!--          v-model="queryParams.bathroom"-->
+<!--          placeholder="请输入浴室数量"-->
+<!--          clearable-->
+<!--          @keyup.enter.native="handleQuery"-->
+<!--        />-->
+<!--      </el-form-item>-->
+<!--      <el-form-item label="街道" prop="street">-->
+<!--        <el-input-->
+<!--          v-model="queryParams.street"-->
+<!--          placeholder="请输入街道"-->
+<!--          clearable-->
+<!--          @keyup.enter.native="handleQuery"-->
+<!--        />-->
+<!--      </el-form-item>-->
       <el-form-item label="房间标签" prop="houseTag">
         <el-select v-model="queryParams.houseTag" placeholder="请选择房间标签" clearable>
           <el-option
@@ -313,7 +313,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
