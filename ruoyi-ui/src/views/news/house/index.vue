@@ -249,9 +249,9 @@
       <el-table-column label="标题" align="center" prop="title" />
       <el-table-column label="价格" align="center" prop="price" />
       <el-table-column label="面积" align="center" prop="area" />
-      <el-table-column label="卧室数量" align="center" prop="room" />
-      <el-table-column label="楼层" align="center" prop="floor" />
-      <el-table-column label="总楼层" align="center" prop="totalFloor" />
+<!--      <el-table-column label="卧室数量" align="center" prop="room" />-->
+<!--      <el-table-column label="楼层" align="center" prop="floor" />-->
+<!--      <el-table-column label="总楼层" align="center" prop="totalFloor" />-->
       <el-table-column label="被看次数" align="center" prop="watchTimes" />
       <el-table-column label="建立年限" align="center" prop="buildYear" width="180">
         <template slot-scope="scope">
@@ -284,22 +284,22 @@
           <dict-tag :options="dict.type.direction" :value="scope.row.direction"/>
         </template>
       </el-table-column>
-      <el-table-column label="地铁距离" align="center" prop="distanceToSubway" />
-      <el-table-column label="客厅数量" align="center" prop="parlour" />
+<!--      <el-table-column label="地铁距离" align="center" prop="distanceToSubway" />-->
+<!--      <el-table-column label="客厅数量" align="center" prop="parlour" />-->
       <el-table-column label="所在小区" align="center" prop="district" />
 <!--      <el-table-column label="所属管理员id" align="center" prop="adminId" />-->
-      <el-table-column label="浴室数量" align="center" prop="bathroom" />
+<!--      <el-table-column label="浴室数量" align="center" prop="bathroom" />-->
       <el-table-column label="街道" align="center" prop="street" />
-      <el-table-column label="房间图片" align="center" prop="housePicture" width="100">
-        <template slot-scope="scope">
-          <image-preview :src="scope.row.housePicture" :width="50" :height="50"/>
-        </template>
-      </el-table-column>
-      <el-table-column label="房间标签" align="center" prop="houseTag">
-        <template slot-scope="scope">
-          <dict-tag :options="dict.type.house_tag" :value="scope.row.houseTag"/>
-        </template>
-      </el-table-column>
+<!--      <el-table-column label="房间图片" align="center" prop="housePicture" width="100">-->
+<!--        <template slot-scope="scope">-->
+<!--          <image-preview :src="scope.row.housePicture" :width="50" :height="50"/>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
+<!--      <el-table-column label="房间标签" align="center" prop="houseTag">-->
+<!--        <template slot-scope="scope">-->
+<!--          <dict-tag :options="dict.type.house_tag" :value="scope.row.houseTag"/>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
