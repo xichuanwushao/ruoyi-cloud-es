@@ -374,14 +374,14 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="更新时间" prop="lastUpdateTime">
-          <el-date-picker clearable
-            v-model="form.lastUpdateTime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择更新时间">
-          </el-date-picker>
-        </el-form-item>
+<!--        <el-form-item label="更新时间" prop="lastUpdateTime">-->
+<!--          <el-date-picker clearable-->
+<!--            v-model="form.lastUpdateTime"-->
+<!--            type="date"-->
+<!--            value-format="yyyy-MM-dd"-->
+<!--            placeholder="请选择更新时间">-->
+<!--          </el-date-picker>-->
+<!--        </el-form-item>-->
         <el-form-item label="城市" prop="cityEnName">
           <el-select v-model="form.cityEnName" placeholder="请选择城市">
             <el-option
@@ -508,11 +508,16 @@
               </el-select>
             </template>
           </el-table-column>
-          <el-table-column label="附近地铁线名称" prop="subwayLineName" width="150">
+          <el-table-column label="附近地铁线名称" align="center" prop="subwayLineName">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.subwayLineName" placeholder="请输入附近地铁线名称" />
+              <dict-tag :options="dict.type.subway_line_id" :value="scope.row.subwayLineId"/>
             </template>
           </el-table-column>
+<!--          <el-table-column label="附近地铁线名称" prop="subwayLineName" width="150">-->
+<!--            <template slot-scope="scope">-->
+<!--              <el-input v-model="scope.row.subwayLineName" placeholder="请输入附近地铁线名称" />-->
+<!--            </template>-->
+<!--          </el-table-column>-->
           <el-table-column label="地铁站id" prop="subwayStationId" width="150">
             <template slot-scope="scope">
               <el-select v-model="scope.row.subwayStationId" placeholder="请选择地铁站id">
@@ -525,11 +530,16 @@
               </el-select>
             </template>
           </el-table-column>
-          <el-table-column label="地铁站名" prop="subwayStationName" width="150">
+          <el-table-column label="地铁站名" align="center" prop="subwayStationName">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.subwayStationName" placeholder="请输入地铁站名" />
+              <dict-tag :options="dict.type.subway_station_id" :value="scope.row.subwayStationId"/>
             </template>
           </el-table-column>
+<!--          <el-table-column label="地铁站名" prop="subwayStationName" width="150">-->
+<!--            <template slot-scope="scope">-->
+<!--              <el-input v-model="scope.row.subwayStationName" placeholder="请输入地铁站名" />-->
+<!--            </template>-->
+<!--          </el-table-column>-->
         </el-table>
       </el-form>
       <div slot="footer" class="dialog-footer">

@@ -2,6 +2,8 @@ package com.ruoyi.news.service.impl;
 
 import java.util.List;
 import com.ruoyi.common.core.utils.DateUtils;
+import com.ruoyi.common.security.utils.SecurityUtils;
+import com.ruoyi.system.api.model.LoginUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
@@ -58,6 +60,7 @@ public class HouseServiceImpl implements IHouseService
     @Override
     public int insertHouse(House house)
     {
+        house.setAdminId(SecurityUtils.getUserId());
         house.setCreateTime(DateUtils.getNowDate());
         int rows = houseMapper.insertHouse(house);
         insertHouseDetail(house);
