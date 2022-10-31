@@ -478,6 +478,7 @@
               <el-input v-model="scope.row.roundService" placeholder="请输入周边配套" />
             </template>
           </el-table-column>
+
           <el-table-column label="租赁方式" prop="rentWay" width="150">
             <template slot-scope="scope">
               <el-select v-model="scope.row.rentWay" placeholder="请选择租赁方式">
@@ -485,7 +486,7 @@
                   v-for="dict in dict.type.rent_way"
                   :key="dict.value"
                   :label="dict.label"
-                  :value="dict.value"
+                  :value="parseInt(dict.value)"
                 ></el-option>
               </el-select>
             </template>
@@ -502,7 +503,7 @@
                   v-for="dict in dict.type.subway_line_id"
                   :key="dict.value"
                   :label="dict.label"
-                  :value="dict.value"
+                  :value="parseInt(dict.value)"
                 ></el-option>
               </el-select>
             </template>
@@ -519,7 +520,7 @@
                   v-for="dict in dict.type.subway_station_id"
                   :key="dict.value"
                   :label="dict.label"
-                  :value="dict.value"
+                  :value="parseInt(dict.value)"
                 ></el-option>
               </el-select>
             </template>
@@ -628,7 +629,7 @@ export default {
           { required: true, message: "建立年限不能为空", trigger: "blur" }
         ],
         status: [
-          { required: true, message: "房屋状态 0-未审核 1-审核通过 2-已出租 3-逻辑删除不能为空", trigger: "change" }
+          { required: true, message: "房屋状态不能为空", trigger: "change" }
         ],
         createTime: [
           { required: true, message: "创建时间不能为空", trigger: "blur" }
@@ -637,10 +638,10 @@ export default {
           { required: true, message: "最近数据更新时间不能为空", trigger: "blur" }
         ],
         cityEnName: [
-          { required: true, message: "城市标记缩写 如 北京bj不能为空", trigger: "change" }
+          { required: true, message: "城市不能为空", trigger: "change" }
         ],
         regionEnName: [
-          { required: true, message: "地区英文简写 如昌平区 cpq不能为空", trigger: "change" }
+          { required: true, message: "地区不能为空", trigger: "change" }
         ],
         direction: [
           { required: true, message: "房屋朝向不能为空", trigger: "change" }
