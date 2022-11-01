@@ -76,20 +76,9 @@ public class HouseServiceImpl implements IHouseService
 
 
         //同时将数据新增到es中
-//        ArticleEO articleEO = new ArticleEO();
-//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//        BeanUtils.copyProperties(chuArticle, articleEO);
-//        articleEO.setPublishTime( simpleDateFormat.format(chuArticle.getPublishTime()));
-//        articleEO.setId(chuArticle.getId());
-//        int success = articleEOMapper.insert(articleEO);
-
-
         HouseIndexTemplate houseIndexTemplate = new HouseIndexTemplate();
         BeanUtils.copyProperties(house, houseIndexTemplate);
         houseIndexTemplate.setHouseId(house.getId());
-        houseIndexTemplate.setDistrict(house.getDistrict());
-        houseIndexTemplate.setDistanceToSubway( house.getDistanceToSubway());
-        houseIndexTemplate.setPrice( house.getPrice());
 
         List<HouseDetail> houseDetailList = house.getHouseDetailList();
         Long id = house.getId();
