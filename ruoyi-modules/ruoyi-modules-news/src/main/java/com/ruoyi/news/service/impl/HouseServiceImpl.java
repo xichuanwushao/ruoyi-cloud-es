@@ -1,14 +1,11 @@
 package com.ruoyi.news.service.impl;
 
-import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.List;
 import com.ruoyi.common.core.utils.DateUtils;
 import com.ruoyi.common.security.utils.SecurityUtils;
-import com.ruoyi.news.domain.model.ArticleEO;
 import com.ruoyi.news.domain.model.HouseIndexTemplate;
-import com.ruoyi.news.mapper.es.ArticleEOMapper;
 import com.ruoyi.news.mapper.es.HouseIndexTemplateMapper;
-import com.ruoyi.system.api.model.LoginUser;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -105,6 +102,22 @@ public class HouseServiceImpl implements IHouseService
     {
         houseMapper.deleteHouseDetailByHouseId(house.getId());
         insertHouseDetail(house);
+
+        //同时将数据新增到es中
+        HouseIndexTemplate houseIndexTemplate = new HouseIndexTemplate();
+        BeanUtils.copyProperties(house, houseIndexTemplate);
+        houseIndexTemplate.setHouseId(house.getId());
+
+        List<HouseDetail> houseDetailList = house.getHouseDetailList();
+        Long id = house.getId();
+        if (StringUtils.isNotNull(houseDetailList))
+        {
+            if(houseDetailList.size()>0) {
+                HouseDetail houseDetail = houseDetailList.get(0);//house与housedetail一对一关系
+                BeanUtils.copyProperties(houseDetail, houseIndexTemplate);
+            }
+            int success = houseIndexTemplateMapper.updateById(houseIndexTemplate);
+        }
         return houseMapper.updateHouse(house);
     }
 
@@ -118,6 +131,10 @@ public class HouseServiceImpl implements IHouseService
     @Override
     public int deleteHouseByIds(Long[] ids)
     {
+        //同时删除es中的数据
+        List<Long> idList = Arrays.asList(ids);
+        int count = houseIndexTemplateMapper.deleteBatchIds(idList);
+
         houseMapper.deleteHouseDetailByHouseIds(ids);
         return houseMapper.deleteHouseByIds(ids);
     }
