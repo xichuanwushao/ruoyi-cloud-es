@@ -1,9 +1,15 @@
 package com.ruoyi.news.service.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 import com.ruoyi.common.core.utils.DateUtils;
 import com.ruoyi.common.security.utils.SecurityUtils;
+import com.ruoyi.news.domain.model.ArticleEO;
+import com.ruoyi.news.domain.model.HouseIndexTemplate;
+import com.ruoyi.news.mapper.es.ArticleEOMapper;
+import com.ruoyi.news.mapper.es.HouseIndexTemplateMapper;
 import com.ruoyi.system.api.model.LoginUser;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
@@ -26,6 +32,8 @@ public class HouseServiceImpl implements IHouseService
     @Autowired
     private HouseMapper houseMapper;
 
+    @Autowired
+    private HouseIndexTemplateMapper houseIndexTemplateMapper;
     /**
      * 查询房屋信息
      * 
@@ -64,6 +72,35 @@ public class HouseServiceImpl implements IHouseService
         house.setCreateTime(DateUtils.getNowDate());
         int rows = houseMapper.insertHouse(house);
         insertHouseDetail(house);
+
+
+
+        //同时将数据新增到es中
+//        ArticleEO articleEO = new ArticleEO();
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        BeanUtils.copyProperties(chuArticle, articleEO);
+//        articleEO.setPublishTime( simpleDateFormat.format(chuArticle.getPublishTime()));
+//        articleEO.setId(chuArticle.getId());
+//        int success = articleEOMapper.insert(articleEO);
+
+
+        HouseIndexTemplate houseIndexTemplate = new HouseIndexTemplate();
+        BeanUtils.copyProperties(house, houseIndexTemplate);
+        houseIndexTemplate.setHouseId(house.getId());
+        houseIndexTemplate.setDistrict(house.getDistrict());
+        houseIndexTemplate.setDistanceToSubway( house.getDistanceToSubway());
+        houseIndexTemplate.setPrice( house.getPrice());
+
+        List<HouseDetail> houseDetailList = house.getHouseDetailList();
+        Long id = house.getId();
+        if (StringUtils.isNotNull(houseDetailList))
+        {
+            if(houseDetailList.size()>0) {
+                HouseDetail houseDetail = houseDetailList.get(0);//house与housedetail一对一关系
+                BeanUtils.copyProperties(houseDetail, houseIndexTemplate);
+            }
+            int success = houseIndexTemplateMapper.insert(houseIndexTemplate);
+        }
         return rows;
     }
 
@@ -133,4 +170,7 @@ public class HouseServiceImpl implements IHouseService
             }
         }
     }
+
+
+
 }

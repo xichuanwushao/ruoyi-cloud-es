@@ -90,7 +90,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where a.id = #{id}
     </select>
         
-    <insert id="insertHouse" parameterType="House" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertHouse" parameterType="com.ruoyi.news.domain.House" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        <selectKey order="AFTER" keyProperty="id" resultType="Long">
+            select last_insert_id()
+        </selectKey>
         insert into house
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="title != null and title != ''">title,</if>
