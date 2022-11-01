@@ -3,6 +3,15 @@ package com.ruoyi.news.controller;
 import java.util.List;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
+
+import cn.easyes.core.biz.PageInfo;
+import cn.easyes.core.conditions.LambdaEsQueryWrapper;
+import com.ruoyi.common.core.web.page.PageDomain;
+import com.ruoyi.common.core.web.page.TableSupport;
+import com.ruoyi.news.domain.ChuArticle;
+import com.ruoyi.news.domain.model.ArticleEO;
+import com.ruoyi.news.domain.model.HouseIndexTemplate;
+import com.ruoyi.news.mapper.es.HouseIndexTemplateMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,6 +44,9 @@ public class HouseController extends BaseController
     @Autowired
     private IHouseService houseService;
 
+    @Autowired
+    private HouseIndexTemplateMapper houseIndexTemplateMapper;
+
     /**
      * 查询房屋信息列表
      */
@@ -45,6 +57,29 @@ public class HouseController extends BaseController
         startPage();
         List<House> list = houseService.selectHouseList(house);
         return getDataTable(list);
+    }
+
+
+    /**
+     * 查询文章资讯列表
+     */
+    @RequiresPermissions("news:house:list")
+    @GetMapping("/es/list")
+    public TableDataInfo eslist(ChuArticle chuArticle)
+    {
+        PageDomain pageDomain = TableSupport.buildPageRequest();
+        Integer pageNum = pageDomain.getPageNum();
+        Integer pageSize = pageDomain.getPageSize();
+        LambdaEsQueryWrapper<HouseIndexTemplate> wrapper = new LambdaEsQueryWrapper<>();
+        if(chuArticle.getTitle()!=null){
+            //对标题命中文字进行高亮显示
+            wrapper.match(HouseIndexTemplate::getTitle, chuArticle.getTitle());
+        }
+        //List<HouseIndexTemplate> articleEOList = articleEOMapper.selectList(wrapper);
+        //进行分页查询
+        PageInfo<HouseIndexTemplate> documentPageInfo = houseIndexTemplateMapper.pageQuery(wrapper,pageNum,pageSize);
+        List<HouseIndexTemplate> articleEOList = documentPageInfo.getList();
+        return getDataTable(articleEOList);
     }
 
     /**
