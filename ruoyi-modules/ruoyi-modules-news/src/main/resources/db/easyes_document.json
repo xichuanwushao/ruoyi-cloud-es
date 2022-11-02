@@ -1,0 +1,109 @@
+//创建索引
+//curl -iX PUT 'http://192.168.170.136:9202/easyes_document?master_timeout=30s&timeout=30s'
+
+{
+  "aliases": {
+    "ee_default_alias": {}
+  },
+  "mappings": {
+    "properties": {
+      "commentContent": {
+        "analyzer": "ik_smart",
+        "type": "text"
+      },
+      "content": {
+        "analyzer": "ik_smart",
+        "type": "text"
+      },
+      "creator": {
+        "analyzer": "ik_smart",
+        "fields": {
+          "keyword": {
+            "ignore_above": 256,
+            "type": "keyword"
+          }
+        },
+        "type": "text"
+      },
+      "filedData": {
+        "fielddata": true,
+        "type": "text"
+      },
+      "geoLocation": {
+        "type": "geo_shape"
+      },
+      "gmtCreate": {
+        "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis",
+        "type": "date"
+      },
+      "joinField": {
+        "eager_global_ordinals": true,
+        "relations": {
+          "document": "comment"
+        },
+        "type": "join"
+      },
+      "location": {
+        "type": "geo_point"
+      },
+      "nullField": {
+        "type": "keyword"
+      },
+      "starNum": {
+        "type": "integer"
+      },
+      "subTitle": {
+        "type": "keyword"
+      },
+      "title": {
+        "type": "keyword"
+      },
+      "users": {
+        "properties": {
+          "faqs": {
+            "properties": {
+              "faqAnswer": {
+                "type": "text"
+              },
+              "faq_name": {
+                "type": "text"
+              }
+            },
+            "type": "nested"
+          },
+          "user_name": {
+            "analyzer": "ik_smart",
+            "type": "text"
+          }
+        },
+        "type": "nested"
+      },
+      "wu-la": {
+        "analyzer": "ik_smart",
+        "type": "text"
+      }
+    }
+  },
+  "settings": {
+    "index": {
+      "number_of_replicas": "2",
+      "number_of_shards": "3"
+    }
+  }
+}
+
+//插入数据
+//curl -iX PUT 'http://192.168.170.136:9202/easyes_document/_doc/2?timeout=1m'
+
+
+//{
+//  "content": "测试内容1",
+//  "creator": "老汉1",
+//  "geoLocation": "BBOX (39.084509, 41.187328, 70.610461, 20.498353)",
+//  "gmtCreate": "2022-11-02 10:38:01",
+//  "location": "40.171975,116.587105",
+//  "nullField": "id为1的数据不是null,除此之外其它都是",
+//  "starNum": 1,
+//  "title": "测试文档1",
+//  "wu-la": "自定义字段1"
+//}
