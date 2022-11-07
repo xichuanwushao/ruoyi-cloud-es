@@ -110,6 +110,9 @@ public class HouseServiceImpl implements IHouseService
         houseIndexTemplate.setHouseId(house.getId());
         houseIndexTemplate.setId(house.getId());
 
+
+
+
         List<HouseDetail> houseDetailList = house.getHouseDetailList();
         Long id = house.getId();
         if (StringUtils.isNotNull(houseDetailList))
@@ -118,7 +121,13 @@ public class HouseServiceImpl implements IHouseService
                 HouseDetail houseDetail = houseDetailList.get(0);//house与housedetail一对一关系
                 BeanUtils.copyProperties(houseDetail, houseIndexTemplate);
             }
-            int success = houseIndexTemplateMapper.updateById(houseIndexTemplate);
+
+            HouseIndexTemplate houseIndexTemplateQu = houseIndexTemplateMapper.selectById(house.getId());
+            if(houseIndexTemplateQu==null){
+                int success = houseIndexTemplateMapper.insert(houseIndexTemplate);
+            }else {
+                int success = houseIndexTemplateMapper.updateById(houseIndexTemplate);
+            }
         }
         return houseMapper.updateHouse(house);
     }

@@ -5,6 +5,7 @@ import cn.easyes.annotation.IndexName;
 import cn.easyes.common.enums.IdType;
 import com.ruoyi.news.service.search.BaiduMapLocation;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  * 索引结构模板
  */
 @IndexName(value = "xunwu")
-public class HouseIndexTemplate {
+public class HouseIndexTemplate  {
 
     @IndexId(type = IdType.CUSTOMIZE)
     private Long id;
