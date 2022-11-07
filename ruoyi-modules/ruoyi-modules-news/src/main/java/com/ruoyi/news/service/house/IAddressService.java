@@ -1,10 +1,10 @@
 package com.ruoyi.news.service.house;
 
 
+import com.ruoyi.news.domain.SupportAddress;
 import com.ruoyi.news.domain.dto.SubwayDTO;
 import com.ruoyi.news.domain.dto.SubwayStationDTO;
 import com.ruoyi.news.domain.dto.SupportAddressDTO;
-import com.ruoyi.news.domain.entity.SupportAddress;
 import com.ruoyi.news.service.ServiceMultiResult;
 import com.ruoyi.news.service.ServiceResult;
 import com.ruoyi.news.service.search.BaiduMapLocation;

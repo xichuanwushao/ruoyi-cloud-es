@@ -42,6 +42,34 @@ public class SupportAddress extends BaseEntity
     @Excel(name = "百度地图纬度")
     private Double baiduMapLat;
 
+    /**
+     * 行政级别定义
+     */
+    public enum Level {
+        CITY("city"),
+        REGION("region");
+
+        private String value;
+
+        Level(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public static com.ruoyi.news.domain.entity.SupportAddress.Level of(String value) {
+            for (com.ruoyi.news.domain.entity.SupportAddress.Level level : com.ruoyi.news.domain.entity.SupportAddress.Level.values()) {
+                if (level.getValue().equals(value)) {
+                    return level;
+                }
+            }
+
+            throw new IllegalArgumentException();
+        }
+    }
+
     public void setId(Long id) 
     {
         this.id = id;
