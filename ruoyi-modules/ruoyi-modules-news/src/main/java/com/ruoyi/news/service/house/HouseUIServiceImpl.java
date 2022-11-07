@@ -17,10 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class HouseUIServiceImpl implements IHouseUIService {
@@ -83,13 +80,46 @@ public class HouseUIServiceImpl implements IHouseUIService {
                 return new ServiceMultiResult<>(0, new ArrayList<>());
             }
 
-//            return new ServiceMultiResult<>(serviceResult.getTotal(), wrapperHouseResult(serviceResult.getResult()));
+            return new ServiceMultiResult<>(serviceResult.getTotal(), wrapperHouseResult(serviceResult.getResult()));
         }
         return simpleQuery(rentSearch);
 
     }
 
+    private List<HouseDTO> wrapperHouseResult(List<Long> houseIds) {
+        List<HouseDTO> result = new ArrayList<>();
 
+        Map<Long, HouseDTO> idToHouseMap = new HashMap<>();
+//        Iterable<House> houses = houseRepository.findAll(houseIds);
+//        houses.forEach(house -> {
+//            HouseDTO houseDTO = modelMapper.map(house, HouseDTO.class);
+//            houseDTO.setCover(this.cdnDomain + house.getCover());
+//            idToHouseMap.put(house.getId(), houseDTO);
+//        });
+
+        houseIds.forEach(houseid -> {
+
+            HouseDTO houseDTO = new HouseDTO();
+            House house = houseService.selectHouseById(houseid);
+            BeanUtils.copyProperties(house,houseDTO);
+            houseDTO.setCover( house.getCover());
+
+            HouseDetailDTO detailDTO = new HouseDetailDTO();
+            House house2 = houseService.selectHouseById(house.getId());
+            if(house2.getHouseDetailList()!=null){
+                HouseDetail houseDetail = house2.getHouseDetailList().get(0);
+                BeanUtils.copyProperties(houseDetail, detailDTO);
+                houseDTO.setHouseDetail(detailDTO);
+            }
+            idToHouseMap.put(house.getId(), houseDTO);
+        });
+
+        // 矫正顺序
+        for (Long houseId : houseIds) {
+            result.add(idToHouseMap.get(houseId));
+        }
+        return result;
+    }
     private ServiceMultiResult<HouseDTO> simpleQuery(RentSearch rentSearch) {
         House house1 = new House();
         house1.setCityEnName(rentSearch.getCityEnName());
@@ -104,9 +134,7 @@ public class HouseUIServiceImpl implements IHouseUIService {
             houseDTO.setCover( house.getCover());
 
             HouseDetailDTO detailDTO = new HouseDetailDTO();
-
             House house2 = houseService.selectHouseById(house.getId());
-
             if(house2.getHouseDetailList()!=null){
                 HouseDetail houseDetail = house2.getHouseDetailList().get(0);
                 BeanUtils.copyProperties(houseDetail, detailDTO);
