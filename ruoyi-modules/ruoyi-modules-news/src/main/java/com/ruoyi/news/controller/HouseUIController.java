@@ -7,9 +7,8 @@ import com.ruoyi.news.domain.form.RentSearch;
 import com.ruoyi.news.service.ServiceMultiResult;
 import com.ruoyi.news.service.ServiceResult;
 import com.ruoyi.news.service.house.IAddressService;
-import com.ruoyi.news.service.house.IHouseService;
+import com.ruoyi.news.service.house.IHouseUIService;
 import com.ruoyi.news.util.base.RentValueBlock;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +16,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
-import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("rent")
@@ -27,7 +24,7 @@ public class HouseUIController {
     @Resource
     private IAddressService addressService;
     @Resource
-    private IHouseService houseService;
+    private IHouseUIService houseService;
 
 
 

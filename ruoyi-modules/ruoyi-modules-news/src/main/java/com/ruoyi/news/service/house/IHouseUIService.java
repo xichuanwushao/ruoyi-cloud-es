@@ -10,7 +10,7 @@ import com.ruoyi.news.service.ServiceResult;
 import com.ruoyi.news.util.base.HouseSubscribeStatus;
 import org.springframework.data.util.Pair;
 import java.util.Date;
-public interface IHouseService {
+public interface IHouseUIService {
     /**
      * 保存房源信息
      *

@@ -3,6 +3,7 @@ package com.ruoyi.news.domain.model;
 import cn.easyes.annotation.IndexId;
 import cn.easyes.annotation.IndexName;
 import cn.easyes.common.enums.IdType;
+import com.ruoyi.news.service.search.BaiduMapLocation;
 
 import java.util.Date;
 import java.util.List;

@@ -11,10 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
-import java.util.Date;
-
 @Service
-public class HouseServiceImpl implements IHouseService {
+public class HouseUIServiceImpl implements IHouseUIService {
 
 
     @Override
