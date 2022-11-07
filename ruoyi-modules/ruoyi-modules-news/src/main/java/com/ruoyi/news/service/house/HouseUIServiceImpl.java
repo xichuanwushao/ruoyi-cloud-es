@@ -10,6 +10,7 @@ import com.ruoyi.news.domain.form.*;
 import com.ruoyi.news.service.IHouseService;
 import com.ruoyi.news.service.ServiceMultiResult;
 import com.ruoyi.news.service.ServiceResult;
+import com.ruoyi.news.service.search.ISearchService;
 import com.ruoyi.news.util.base.HouseSubscribeStatus;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ import java.util.Map;
 public class HouseUIServiceImpl implements IHouseUIService {
     @Autowired
     private IHouseService houseService;
+
+    @Autowired
+    private ISearchService searchService;
 
     @Override
     public ServiceResult<HouseDTO> save(HouseForm houseForm) {
@@ -73,14 +77,14 @@ public class HouseUIServiceImpl implements IHouseUIService {
 
     @Override
     public ServiceMultiResult<HouseDTO> query(RentSearch rentSearch) {
-//        if (rentSearch.getKeywords() != null && !rentSearch.getKeywords().isEmpty()) {
-//            ServiceMultiResult<Long> serviceResult = searchService.query(rentSearch);
-//            if (serviceResult.getTotal() == 0) {
-//                return new ServiceMultiResult<>(0, new ArrayList<>());
-//            }
-//
+        if (rentSearch.getKeywords() != null && !rentSearch.getKeywords().isEmpty()) {
+            ServiceMultiResult<Long> serviceResult = searchService.query(rentSearch);
+            if (serviceResult.getTotal() == 0) {
+                return new ServiceMultiResult<>(0, new ArrayList<>());
+            }
+
 //            return new ServiceMultiResult<>(serviceResult.getTotal(), wrapperHouseResult(serviceResult.getResult()));
-//        }
+        }
         return simpleQuery(rentSearch);
 
     }
