@@ -76,6 +76,7 @@ public class HouseServiceImpl implements IHouseService
         HouseIndexTemplate houseIndexTemplate = new HouseIndexTemplate();
         BeanUtils.copyProperties(house, houseIndexTemplate);
         houseIndexTemplate.setHouseId(house.getId());
+        houseIndexTemplate.setId(house.getId());
 
         List<HouseDetail> houseDetailList = house.getHouseDetailList();
         Long id = house.getId();

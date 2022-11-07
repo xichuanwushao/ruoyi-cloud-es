@@ -13,7 +13,10 @@ import java.util.List;
  */
 @IndexName(value = "xunwu")
 public class HouseIndexTemplate {
+
     @IndexId(type = IdType.CUSTOMIZE)
+    private Long id;
+
     private Long houseId;
 
     private String title;
@@ -57,6 +60,14 @@ public class HouseIndexTemplate {
     private List<HouseSuggest> suggest;
 
     private BaiduMapLocation location;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public BaiduMapLocation getLocation() {
         return location;
