@@ -9,9 +9,11 @@ import com.ruoyi.news.mapper.SupportAddressMapper;
 import com.ruoyi.news.service.ServiceMultiResult;
 import com.ruoyi.news.service.ServiceResult;
 import com.ruoyi.news.service.search.BaiduMapLocation;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.modelmapper.ModelMapper;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -21,8 +23,7 @@ public class AddressServiceImpl implements IAddressService {
     @Autowired
     private SupportAddressMapper supportAddressRepository;
 
-    @Autowired
-    private ModelMapper modelMapper;
+
 
     @Override
     public ServiceMultiResult<SupportAddressDTO> findAllCities() {
@@ -36,7 +37,27 @@ public class AddressServiceImpl implements IAddressService {
 
     @Override
     public ServiceMultiResult findAllRegionsByCityName(String cityName) {
-        return null;
+        if (cityName == null) {
+            return new ServiceMultiResult<>(0, null);
+        }
+
+        List<SupportAddressDTO> result = new ArrayList<>();
+
+        SupportAddress supportAddressQu = new SupportAddress();
+        supportAddressQu.setBelongTo(cityName);
+        supportAddressQu.setLevel(SupportAddress.Level.REGION
+                .getValue());
+        List<SupportAddress> regions = supportAddressRepository.selectSupportAddressList(supportAddressQu);
+
+//        List<SupportAddress> regions = supportAddressRepository.findAllByLevelAndBelongTo(SupportAddress.Level.REGION
+//                .getValue(), cityName);
+        for (SupportAddress region : regions) {
+//            result.add(modelMapper.map(region, SupportAddressDTO.class));
+            SupportAddressDTO supportAddressDTO = new SupportAddressDTO();
+            BeanUtils.copyProperties(region, supportAddressDTO);
+            result.add(supportAddressDTO);
+        }
+        return new ServiceMultiResult<>(regions.size(), result);
     }
 
     @Override
@@ -69,12 +90,15 @@ public class AddressServiceImpl implements IAddressService {
         supportAddressQu.setLevel(SupportAddress.Level.CITY.getValue());
         SupportAddress supportAddress = supportAddressRepository.selectSupportAddressList(supportAddressQu).get(0);
 
-//        SupportAddress supportAddress = supportAddressRepository.findByEnNameAndLevel(cityEnName, SupportAddress.Level.CITY.getValue());
+//      SupportAddress supportAddress = supportAddressRepository.findByEnNameAndLevel(cityEnName, SupportAddress.Level.CITY.getValue());
         if (supportAddress == null) {
             return ServiceResult.notFound();
         }
 
-        SupportAddressDTO addressDTO = modelMapper.map(supportAddress, SupportAddressDTO.class);
+//        SupportAddressDTO addressDTO = modelMapper.map(supportAddress, SupportAddressDTO.class);
+
+        SupportAddressDTO addressDTO = new SupportAddressDTO();
+        BeanUtils.copyProperties(supportAddress, addressDTO);
         return ServiceResult.of(addressDTO);
     }
 

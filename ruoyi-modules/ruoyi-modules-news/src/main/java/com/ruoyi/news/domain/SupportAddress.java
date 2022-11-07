@@ -59,8 +59,8 @@ public class SupportAddress extends BaseEntity
             return value;
         }
 
-        public static com.ruoyi.news.domain.entity.SupportAddress.Level of(String value) {
-            for (com.ruoyi.news.domain.entity.SupportAddress.Level level : com.ruoyi.news.domain.entity.SupportAddress.Level.values()) {
+        public static SupportAddress.Level of(String value) {
+            for (SupportAddress.Level level : SupportAddress.Level.values()) {
                 if (level.getValue().equals(value)) {
                     return level;
                 }
