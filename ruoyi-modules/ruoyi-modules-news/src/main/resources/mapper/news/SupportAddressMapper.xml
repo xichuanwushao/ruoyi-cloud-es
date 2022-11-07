@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.news.mapper.SupportAddressMapper">
+    
+    <resultMap type="SupportAddress" id="SupportAddressResult">
+        <result property="id"    column="id"    />
+        <result property="belongTo"    column="belong_to"    />
+        <result property="enName"    column="en_name"    />
+        <result property="cnName"    column="cn_name"    />
+        <result property="level"    column="level"    />
+        <result property="baiduMapLng"    column="baidu_map_lng"    />
+        <result property="baiduMapLat"    column="baidu_map_lat"    />
+    </resultMap>
+
+    <sql id="selectSupportAddressVo">
+        select id, belong_to, en_name, cn_name, level, baidu_map_lng, baidu_map_lat from support_address
+    </sql>
+
+    <select id="selectSupportAddressList" parameterType="SupportAddress" resultMap="SupportAddressResult">
+        <include refid="selectSupportAddressVo"/>
+        <where>  
+            <if test="belongTo != null  and belongTo != ''"> and belong_to = #{belongTo}</if>
+            <if test="enName != null  and enName != ''"> and en_name = #{enName}</if>
+            <if test="cnName != null  and cnName != ''"> and cn_name = #{cnName}</if>
+            <if test="level != null  and level != ''"> and level = #{level}</if>
+            <if test="baiduMapLng != null "> and baidu_map_lng = #{baiduMapLng}</if>
+            <if test="baiduMapLat != null "> and baidu_map_lat = #{baiduMapLat}</if>
+        </where>
+    </select>
+    
+    <select id="selectSupportAddressById" parameterType="Long" resultMap="SupportAddressResult">
+        <include refid="selectSupportAddressVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSupportAddress" parameterType="SupportAddress" useGeneratedKeys="true" keyProperty="id">
+        insert into support_address
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="belongTo != null and belongTo != ''">belong_to,</if>
+            <if test="enName != null and enName != ''">en_name,</if>
+            <if test="cnName != null and cnName != ''">cn_name,</if>
+            <if test="level != null and level != ''">level,</if>
+            <if test="baiduMapLng != null">baidu_map_lng,</if>
+            <if test="baiduMapLat != null">baidu_map_lat,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="belongTo != null and belongTo != ''">#{belongTo},</if>
+            <if test="enName != null and enName != ''">#{enName},</if>
+            <if test="cnName != null and cnName != ''">#{cnName},</if>
+            <if test="level != null and level != ''">#{level},</if>
+            <if test="baiduMapLng != null">#{baiduMapLng},</if>
+            <if test="baiduMapLat != null">#{baiduMapLat},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSupportAddress" parameterType="SupportAddress">
+        update support_address
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="belongTo != null and belongTo != ''">belong_to = #{belongTo},</if>
+            <if test="enName != null and enName != ''">en_name = #{enName},</if>
+            <if test="cnName != null and cnName != ''">cn_name = #{cnName},</if>
+            <if test="level != null and level != ''">level = #{level},</if>
+            <if test="baiduMapLng != null">baidu_map_lng = #{baiduMapLng},</if>
+            <if test="baiduMapLat != null">baidu_map_lat = #{baiduMapLat},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSupportAddressById" parameterType="Long">
+        delete from support_address where id = #{id}
+    </delete>
+
+    <delete id="deleteSupportAddressByIds" parameterType="String">
+        delete from support_address where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
