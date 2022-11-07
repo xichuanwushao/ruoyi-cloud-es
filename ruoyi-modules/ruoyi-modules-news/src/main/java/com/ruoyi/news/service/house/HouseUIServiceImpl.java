@@ -1,19 +1,30 @@
 package com.ruoyi.news.service.house;
 
 
+import com.google.common.collect.Maps;
+import com.ruoyi.news.domain.House;
+import com.ruoyi.news.domain.HouseDetail;
 import com.ruoyi.news.domain.dto.HouseDTO;
+import com.ruoyi.news.domain.dto.HouseDetailDTO;
 import com.ruoyi.news.domain.form.*;
+import com.ruoyi.news.service.IHouseService;
 import com.ruoyi.news.service.ServiceMultiResult;
 import com.ruoyi.news.service.ServiceResult;
 import com.ruoyi.news.util.base.HouseSubscribeStatus;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class HouseUIServiceImpl implements IHouseUIService {
-
+    @Autowired
+    private IHouseService houseService;
 
     @Override
     public ServiceResult<HouseDTO> save(HouseForm houseForm) {
@@ -62,8 +73,51 @@ public class HouseUIServiceImpl implements IHouseUIService {
 
     @Override
     public ServiceMultiResult<HouseDTO> query(RentSearch rentSearch) {
-        return null;
+//        if (rentSearch.getKeywords() != null && !rentSearch.getKeywords().isEmpty()) {
+//            ServiceMultiResult<Long> serviceResult = searchService.query(rentSearch);
+//            if (serviceResult.getTotal() == 0) {
+//                return new ServiceMultiResult<>(0, new ArrayList<>());
+//            }
+//
+//            return new ServiceMultiResult<>(serviceResult.getTotal(), wrapperHouseResult(serviceResult.getResult()));
+//        }
+        return simpleQuery(rentSearch);
+
     }
+
+
+    private ServiceMultiResult<HouseDTO> simpleQuery(RentSearch rentSearch) {
+        House house1 = new House();
+        house1.setCityEnName(rentSearch.getCityEnName());
+        List<House> houses = houseService.selectHouseList(house1);
+        List<HouseDTO> houseDTOS = new ArrayList<>();
+//        List<Long> houseIds = new ArrayList<>();
+//        Map<Long, HouseDTO> idToHouseMap = Maps.newHashMap();
+        houses.forEach(house -> {
+
+            HouseDTO houseDTO = new HouseDTO();
+            BeanUtils.copyProperties(house, houseDTO);
+            houseDTO.setCover( house.getCover());
+
+            HouseDetailDTO detailDTO = new HouseDetailDTO();
+
+            House house2 = houseService.selectHouseById(house.getId());
+
+            if(house2.getHouseDetailList()!=null){
+                HouseDetail houseDetail = house2.getHouseDetailList().get(0);
+                BeanUtils.copyProperties(houseDetail, detailDTO);
+                houseDTO.setHouseDetail(detailDTO);
+            }
+
+            houseDTOS.add(houseDTO);
+//            houseIds.add(house.getId());
+//            idToHouseMap.put(house.getId(), houseDTO);
+        });
+
+        return new ServiceMultiResult<>(houses.size(), houseDTOS);
+    }
+
+
 
     @Override
     public ServiceMultiResult<HouseDTO> wholeMapQuery(MapSearch mapSearch) {
