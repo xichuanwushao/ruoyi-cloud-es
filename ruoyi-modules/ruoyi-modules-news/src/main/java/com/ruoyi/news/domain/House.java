@@ -27,27 +27,27 @@ public class House extends BaseEntity
 
     /** 价格 */
     @Excel(name = "价格")
-    private Long price;
+    private Integer price;
 
     /** 面积 */
     @Excel(name = "面积")
-    private Long area;
+    private Integer area;
 
     /** 卧室数量 */
     @Excel(name = "卧室数量")
-    private Long room;
+    private Integer room;
 
     /** 楼层 */
     @Excel(name = "楼层")
-    private Long floor;
+    private Integer floor;
 
     /** 总楼层 */
     @Excel(name = "总楼层")
-    private Long totalFloor;
+    private Integer totalFloor;
 
     /** 被看次数 */
     @Excel(name = "被看次数")
-    private Long watchTimes;
+    private Integer watchTimes;
 
     /** 建立年限 */
     @Excel(name = "建立年限")
@@ -76,15 +76,15 @@ public class House extends BaseEntity
 
     /** 房屋朝向 */
     @Excel(name = "房屋朝向")
-    private Long direction;
+    private Integer direction;
 
     /** 距地铁距离 默认-1 附近无地铁 */
     @Excel(name = "距地铁距离 默认-1 附近无地铁")
-    private Long distanceToSubway;
+    private Integer distanceToSubway;
 
     /** 客厅数量 */
     @Excel(name = "客厅数量")
-    private Long parlour;
+    private Integer parlour;
 
     /** 所在小区 */
     @Excel(name = "所在小区")
@@ -96,7 +96,7 @@ public class House extends BaseEntity
 
     /** 浴室数量 */
     @Excel(name = "浴室数量")
-    private Long bathroom;
+    private Integer bathroom;
 
     /** 街道 */
     @Excel(name = "街道")
@@ -131,60 +131,16 @@ public class House extends BaseEntity
     {
         return title;
     }
-    public void setPrice(Long price) 
-    {
+
+    public Integer getPrice() {
+        return price;
+    }
+
+    public void setPrice(Integer price) {
         this.price = price;
     }
 
-    public Long getPrice() 
-    {
-        return price;
-    }
-    public void setArea(Long area) 
-    {
-        this.area = area;
-    }
 
-    public Long getArea() 
-    {
-        return area;
-    }
-    public void setRoom(Long room) 
-    {
-        this.room = room;
-    }
-
-    public Long getRoom() 
-    {
-        return room;
-    }
-    public void setFloor(Long floor) 
-    {
-        this.floor = floor;
-    }
-
-    public Long getFloor() 
-    {
-        return floor;
-    }
-    public void setTotalFloor(Long totalFloor) 
-    {
-        this.totalFloor = totalFloor;
-    }
-
-    public Long getTotalFloor() 
-    {
-        return totalFloor;
-    }
-    public void setWatchTimes(Long watchTimes) 
-    {
-        this.watchTimes = watchTimes;
-    }
-
-    public Long getWatchTimes() 
-    {
-        return watchTimes;
-    }
     public void setBuildYear(Integer buildYear) 
     {
         this.buildYear = buildYear;
@@ -239,33 +195,7 @@ public class House extends BaseEntity
     {
         return cover;
     }
-    public void setDirection(Long direction) 
-    {
-        this.direction = direction;
-    }
 
-    public Long getDirection() 
-    {
-        return direction;
-    }
-    public void setDistanceToSubway(Long distanceToSubway) 
-    {
-        this.distanceToSubway = distanceToSubway;
-    }
-
-    public Long getDistanceToSubway() 
-    {
-        return distanceToSubway;
-    }
-    public void setParlour(Long parlour) 
-    {
-        this.parlour = parlour;
-    }
-
-    public Long getParlour() 
-    {
-        return parlour;
-    }
     public void setDistrict(String district) 
     {
         this.district = district;
@@ -284,15 +214,7 @@ public class House extends BaseEntity
     {
         return adminId;
     }
-    public void setBathroom(Long bathroom) 
-    {
-        this.bathroom = bathroom;
-    }
 
-    public Long getBathroom() 
-    {
-        return bathroom;
-    }
     public void setStreet(String street) 
     {
         this.street = street;
@@ -329,6 +251,78 @@ public class House extends BaseEntity
     public void setHouseDetailList(List<HouseDetail> houseDetailList)
     {
         this.houseDetailList = houseDetailList;
+    }
+
+    public Integer getArea() {
+        return area;
+    }
+
+    public void setArea(Integer area) {
+        this.area = area;
+    }
+
+    public Integer getRoom() {
+        return room;
+    }
+
+    public void setRoom(Integer room) {
+        this.room = room;
+    }
+
+    public Integer getFloor() {
+        return floor;
+    }
+
+    public void setFloor(Integer floor) {
+        this.floor = floor;
+    }
+
+    public Integer getTotalFloor() {
+        return totalFloor;
+    }
+
+    public void setTotalFloor(Integer totalFloor) {
+        this.totalFloor = totalFloor;
+    }
+
+    public Integer getWatchTimes() {
+        return watchTimes;
+    }
+
+    public void setWatchTimes(Integer watchTimes) {
+        this.watchTimes = watchTimes;
+    }
+
+    public Integer getDirection() {
+        return direction;
+    }
+
+    public void setDirection(Integer direction) {
+        this.direction = direction;
+    }
+
+    public Integer getDistanceToSubway() {
+        return distanceToSubway;
+    }
+
+    public void setDistanceToSubway(Integer distanceToSubway) {
+        this.distanceToSubway = distanceToSubway;
+    }
+
+    public Integer getParlour() {
+        return parlour;
+    }
+
+    public void setParlour(Integer parlour) {
+        this.parlour = parlour;
+    }
+
+    public Integer getBathroom() {
+        return bathroom;
+    }
+
+    public void setBathroom(Integer bathroom) {
+        this.bathroom = bathroom;
     }
 
     @Override
