@@ -98,6 +98,7 @@ public class SearchServiceImpl implements ISearchService {
         }
 //        modelMapper.map(detail, indexTemplate);
         BeanUtils.copyProperties(detail, indexTemplate);
+        indexTemplate.setId(houseId);
 
         SupportAddress supportAddressQu1 = new SupportAddress();
         supportAddressQu1.setEnName(house.getCityEnName());
