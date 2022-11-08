@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +33,36 @@ public class AddressServiceImpl implements IAddressService {
 
     @Override
     public Map<SupportAddress.Level, SupportAddressDTO> findCityAndRegion(String cityEnName, String regionEnName) {
-        return null;
+        Map<SupportAddress.Level, SupportAddressDTO> result = new HashMap<>();
+
+//        SupportAddress city = supportAddressRepository.findByEnNameAndLevel(cityEnName, SupportAddress.Level.CITY
+//                .getValue());
+//        SupportAddress region = supportAddressRepository.findByEnNameAndBelongTo(regionEnName, city.getEnName());
+
+        SupportAddress supportAddressQu2 = new SupportAddress();
+        supportAddressQu2.setEnName(cityEnName);
+        supportAddressQu2.setLevel(SupportAddress.Level.CITY.getValue());
+        SupportAddress city = supportAddressRepository.selectSupportAddressList(supportAddressQu2).get(0);
+
+
+        SupportAddress supportAddressQu1 = new SupportAddress();
+        supportAddressQu1.setBelongTo(city.getEnName());
+        supportAddressQu1.setEnName(regionEnName);
+        supportAddressQu1.setLevel(SupportAddress.Level.REGION
+                .getValue());
+        SupportAddress region = supportAddressRepository.selectSupportAddressList(supportAddressQu1).get(0);
+
+        SupportAddressDTO cityAddressDTO = new SupportAddressDTO();
+        BeanUtils.copyProperties(city, cityAddressDTO);
+
+        SupportAddressDTO regionAddressDTO = new SupportAddressDTO();
+        BeanUtils.copyProperties(region, regionAddressDTO);
+
+//        result.put(SupportAddress.Level.CITY, modelMapper.map(city, SupportAddressDTO.class));
+//        result.put(SupportAddress.Level.REGION, modelMapper.map(region, SupportAddressDTO.class));
+        result.put(SupportAddress.Level.CITY, cityAddressDTO);
+        result.put(SupportAddress.Level.REGION, regionAddressDTO);
+        return result;
     }
 
     @Override

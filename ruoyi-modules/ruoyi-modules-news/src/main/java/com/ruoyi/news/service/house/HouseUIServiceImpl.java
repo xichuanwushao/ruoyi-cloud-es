@@ -44,7 +44,19 @@ public class HouseUIServiceImpl implements IHouseUIService {
 
     @Override
     public ServiceResult<HouseDTO> findCompleteOne(Long id) {
-        return null;
+        HouseDTO houseDTO = new HouseDTO();
+        House house = houseService.selectHouseById(id);
+        BeanUtils.copyProperties(house,houseDTO);
+        houseDTO.setCover( house.getCover());
+
+        HouseDetailDTO detailDTO = new HouseDetailDTO();
+        House house2 = houseService.selectHouseById(house.getId());
+        if(house2.getHouseDetailList()!=null){
+            HouseDetail houseDetail = house2.getHouseDetailList().get(0);
+            BeanUtils.copyProperties(houseDetail, detailDTO);
+            houseDTO.setHouseDetail(detailDTO);
+        }
+        return ServiceResult.of(houseDTO);
     }
 
     @Override
