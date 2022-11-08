@@ -5,6 +5,9 @@
   "mappings": {
     "dynamic": false,
     "properties": {
+      "id": {
+        "type": "long"
+      },
       "houseId": {
         "type": "long"
       },
