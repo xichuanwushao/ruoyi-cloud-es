@@ -1,28 +1,44 @@
 package com.ruoyi.news.service.search;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.primitives.Longs;
+import com.ruoyi.news.domain.House;
+import com.ruoyi.news.domain.HouseDetail;
+import com.ruoyi.news.domain.SupportAddress;
 import com.ruoyi.news.domain.form.MapSearch;
 import com.ruoyi.news.domain.form.RentSearch;
+import com.ruoyi.news.domain.model.HouseIndexTemplate;
+import com.ruoyi.news.mapper.SupportAddressMapper;
+import com.ruoyi.news.service.IHouseService;
 import com.ruoyi.news.service.ServiceMultiResult;
 import com.ruoyi.news.service.ServiceResult;
 import com.ruoyi.news.util.base.HouseSort;
 import com.ruoyi.news.util.base.RentValueBlock;
+import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.update.UpdateRequest;
+import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.RangeQueryBuilder;
+import org.elasticsearch.index.reindex.BulkByScrollResponse;
+import org.elasticsearch.index.reindex.DeleteByQueryRequest;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.springframework.util.CollectionUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,12 +54,163 @@ public class SearchServiceImpl implements ISearchService {
     private static final String INDEX_TOPIC = "house_build";
 
     @Autowired
+    private SupportAddressMapper supportAddressRepository;
+
+    @Autowired
     private RestHighLevelClient esClient;
+
+    @Autowired
+    private IHouseService houseService;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Override
     public void index(Long houseId) {
+        HouseIndexMessage message = new HouseIndexMessage();
+        message.setHouseId(houseId);
+        try {
+            createOrUpdateIndex(message);
+        }catch (Exception e){
 
+        }
     }
+
+
+
+    private void createOrUpdateIndex(HouseIndexMessage message) throws IOException {
+        Long houseId = message.getHouseId();
+//        House house = houseRepository.findOne(houseId);
+        House house = houseService.selectHouseById(houseId);
+        if (house == null) {
+            logger.error("Index house{} does not exist!", houseId);
+            this.index(houseId, message.getRetry() + 1);
+            return;
+        }
+        HouseIndexTemplate indexTemplate = new HouseIndexTemplate();
+//        modelMapper.map(house, indexTemxplate);
+        BeanUtils.copyProperties(house,indexTemplate);
+
+//        HouseDetail detail = houseDetailRepository.findByHouseId(houseId);
+        HouseDetail detail = house.getHouseDetailList().get(0);
+        if (detail == null) {
+            // TODO 异常情况
+        }
+//        modelMapper.map(detail, indexTemplate);
+        BeanUtils.copyProperties(detail, indexTemplate);
+
+        SupportAddress supportAddressQu1 = new SupportAddress();
+        supportAddressQu1.setEnName(house.getCityEnName());
+        supportAddressQu1.setLevel(SupportAddress.Level.CITY.getValue());
+        SupportAddress city  = supportAddressRepository.selectSupportAddressList(supportAddressQu1).get(0);
+
+        SupportAddress supportAddressQu2 = new SupportAddress();
+        supportAddressQu2.setEnName(house.getRegionEnName());
+        supportAddressQu2.setLevel(SupportAddress.Level.REGION
+                .getValue());
+        SupportAddress region = supportAddressRepository.selectSupportAddressList(supportAddressQu2).get(0);
+
+
+//         SupportAddress city = supportAddressRepository.findByEnNameAndLevel(house.getCityEnName(), SupportAddress.Level.CITY.getValue());
+//        SupportAddress region = supportAddressRepository.findByEnNameAndLevel(house.getRegionEnName(), SupportAddress.Level.REGION.getValue());
+        String address = city.getCnName() + region.getCnName() + house.getStreet() + house.getDistrict() + detail.getAddress();
+//TODO
+//        ServiceResult<BaiduMapLocation> location = addressService.getBaiduMapLocation(city.getCnName(), address);
+//        if (!location.isSuccess()) {
+//            this.index(message.getHouseId(), message.getRetry() + 1);
+//            return;
+//        }
+
+//TODO        indexTemplate.setLocation(location.getResult());
+
+// TODO       List<HouseTag> tags = tagRepository.findAllByHouseId(houseId);
+//        if (!CollectionUtils.isEmpty(tags)) {
+//            List<String> tagStrings = new ArrayList<>();
+//            tags.forEach(houseTag -> tagStrings.add(houseTag.getName()));//把list中对象某个字段取出来 加入到其他list
+//            indexTemplate.setTags(tagStrings);
+//        }
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder()
+                .docValueField(INDEX_TYPE)
+                .query(QueryBuilders.termQuery(HouseIndexKey.HOUSE_ID, houseId));
+        SearchRequest searchRequest = new SearchRequest(INDEX_NAME);
+        searchRequest.source(searchSourceBuilder);
+        SearchResponse searchResponse = esClient.search(searchRequest, RequestOptions.DEFAULT);
+        boolean success;
+        SearchHit[] hits = searchResponse.getHits().getHits();
+        long totalHit = searchResponse.getHits().getTotalHits().value;
+        if (totalHit == 0) {
+            success = create(indexTemplate);
+        } else if (totalHit == 1) {
+            String esId = searchResponse.getHits().getAt(0).getId();
+            success = update(esId, indexTemplate);
+        } else {
+            success = deleteAndCreate(totalHit, indexTemplate);
+        }
+        ServiceResult serviceResult = ServiceResult.success();
+//TODO        ServiceResult serviceResult = addressService.lbsUpload(location.getResult(), house.getStreet() + house.getDistrict(),
+//                city.getCnName() + region.getCnName() + house.getStreet() + house.getDistrict(),
+//                message.getHouseId(), house.getPrice(), house.getArea());
+
+        if (!success || !serviceResult.isSuccess()) {
+            this.index(message.getHouseId(), message.getRetry() + 1);
+        } else {
+            logger.debug("Index success with house " + houseId);
+        }
+//        if (success) {
+//        	logger.debug("Index success with house " + houseId);
+//		}
+    }
+
+    private boolean create(HouseIndexTemplate indexTemplate) {
+//TODO        if (!updateSuggest(indexTemplate)) { //search-as-you-type自动补全
+//            return false;
+//        }
+
+        try {
+            IndexRequest source = new IndexRequest(INDEX_NAME).source(objectMapper.writeValueAsBytes(indexTemplate), XContentType.JSON);
+            IndexResponse response = esClient.index(source, RequestOptions.DEFAULT);
+
+            logger.debug("Create index with house: " + indexTemplate.getHouseId());
+            return response.status() == RestStatus.CREATED;
+        } catch (IOException e) {
+            logger.error("Error to index house " + indexTemplate.getHouseId(), e);
+            return false;
+        }
+    }
+    private boolean update(String esId, HouseIndexTemplate indexTemplate) {
+//TODO        if (!updateSuggest(indexTemplate)) {
+//            return false;
+//        }
+
+        try {
+            UpdateRequest request = new UpdateRequest().index(INDEX_NAME).doc(objectMapper.writeValueAsBytes(indexTemplate), XContentType.JSON).id(esId);
+            UpdateResponse response = esClient.update(request, RequestOptions.DEFAULT);
+
+            logger.debug("Update index with house: " + indexTemplate.getHouseId());
+            return response.status() == RestStatus.OK;
+        } catch (IOException e) {
+            logger.error("Error to index house " + indexTemplate.getHouseId(), e);
+            return false;
+        }
+    }
+
+    private boolean deleteAndCreate(long totalHit, HouseIndexTemplate indexTemplate) throws IOException {
+        DeleteByQueryRequest request = new DeleteByQueryRequest(INDEX_NAME).setQuery(QueryBuilders.termQuery(HouseIndexKey.HOUSE_ID, indexTemplate.getHouseId()));
+        BulkByScrollResponse response = esClient.deleteByQuery(request, RequestOptions.DEFAULT);
+        logger.debug("Delete by query for house: " + request);
+
+        long deleted = response.getDeleted();
+        if (deleted != totalHit) {
+            logger.warn("Need delete {}, but {} was deleted!", totalHit, deleted);
+            return false;
+        } else {
+            return create(indexTemplate);
+        }
+    }
+
+
+    private void index(Long houseId, int retry) {}
+
 
     @Override
     public void remove(Long houseId) {
