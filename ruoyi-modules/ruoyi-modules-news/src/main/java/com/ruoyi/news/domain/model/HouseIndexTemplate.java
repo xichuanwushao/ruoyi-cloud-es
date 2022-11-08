@@ -5,7 +5,6 @@ import cn.easyes.annotation.IndexName;
 import cn.easyes.common.enums.IdType;
 import com.ruoyi.news.service.search.BaiduMapLocation;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -13,8 +12,7 @@ import java.util.List;
  * 索引结构模板
  */
 @IndexName(value = "xunwu")
-public class HouseIndexTemplate  {
-
+public class HouseIndexTemplate {
     @IndexId(type = IdType.CUSTOMIZE)
     private Long id;
 
@@ -22,9 +20,9 @@ public class HouseIndexTemplate  {
 
     private String title;
 
-    private Long price;
+    private int price;
 
-    private Long area;
+    private int area;
 
     private Date createTime;
 
@@ -34,9 +32,9 @@ public class HouseIndexTemplate  {
 
     private String regionEnName;
 
-    private Long direction;
+    private int direction;
 
-    private Long distanceToSubway;
+    private int distanceToSubway;
 
     private String subwayLineName;
 
@@ -94,11 +92,21 @@ public class HouseIndexTemplate  {
         this.title = title;
     }
 
-    public Long getPrice() {
+    public int getPrice() {
         return price;
     }
 
+    public void setPrice(int price) {
+        this.price = price;
+    }
 
+    public int getArea() {
+        return area;
+    }
+
+    public void setArea(int area) {
+        this.area = area;
+    }
 
     public Date getCreateTime() {
         return createTime;
@@ -132,16 +140,19 @@ public class HouseIndexTemplate  {
         this.regionEnName = regionEnName;
     }
 
-
-    public void setPrice(Long price) {
-        this.price = price;
+    public int getDirection() {
+        return direction;
     }
 
-    public Long getDistanceToSubway() {
+    public void setDirection(int direction) {
+        this.direction = direction;
+    }
+
+    public int getDistanceToSubway() {
         return distanceToSubway;
     }
 
-    public void setDistanceToSubway(Long distanceToSubway) {
+    public void setDistanceToSubway(int distanceToSubway) {
         this.distanceToSubway = distanceToSubway;
     }
 
@@ -231,21 +242,5 @@ public class HouseIndexTemplate  {
 
     public void setSuggest(List<HouseSuggest> suggest) {
         this.suggest = suggest;
-    }
-
-    public Long getArea() {
-        return area;
-    }
-
-    public void setArea(Long area) {
-        this.area = area;
-    }
-
-    public Long getDirection() {
-        return direction;
-    }
-
-    public void setDirection(Long direction) {
-        this.direction = direction;
     }
 }
