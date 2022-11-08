@@ -272,16 +272,17 @@ public class SearchServiceImpl implements ISearchService {
 //	                        .boost(2.0f) //设置查询字段的权重
 //	        );
 
-        boolQuery.must(
-                QueryBuilders.multiMatchQuery(rentSearch.getKeywords(),
-                        HouseIndexKey.TITLE,
-                        HouseIndexKey.TRAFFIC,
-                        HouseIndexKey.DISTRICT,
-                        HouseIndexKey.ROUND_SERVICE,
-                        HouseIndexKey.SUBWAY_LINE_NAME,
-                        HouseIndexKey.SUBWAY_STATION_NAME
-                ));
-
+        if(rentSearch.getKeywords() != null) {
+            boolQuery.must(
+                    QueryBuilders.multiMatchQuery(rentSearch.getKeywords(),
+                            HouseIndexKey.TITLE,
+                            HouseIndexKey.TRAFFIC,
+                            HouseIndexKey.DISTRICT,
+                            HouseIndexKey.ROUND_SERVICE,
+                            HouseIndexKey.SUBWAY_LINE_NAME,
+                            HouseIndexKey.SUBWAY_STATION_NAME
+                    ));
+        }
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder()
                 .query(boolQuery)
                 .sort(HouseSort.getSortKey(rentSearch.getOrderBy()), SortOrder.fromString(rentSearch.getOrderDirection()))

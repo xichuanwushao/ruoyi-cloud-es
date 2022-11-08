@@ -74,7 +74,20 @@ public class HouseUIServiceImpl implements IHouseUIService {
 
     @Override
     public ServiceMultiResult<HouseDTO> query(RentSearch rentSearch) {
-        if (rentSearch.getKeywords() != null && !rentSearch.getKeywords().isEmpty()) {
+//        if (rentSearch.getKeywords() != null && !rentSearch.getKeywords().isEmpty()) {
+//            ServiceMultiResult<Long> serviceResult = searchService.query(rentSearch);
+//            if (serviceResult.getTotal() == 0) {
+//                return new ServiceMultiResult<>(0, new ArrayList<>());
+//            }
+//
+//            return new ServiceMultiResult<>(serviceResult.getTotal(), wrapperHouseResult(serviceResult.getResult()));
+//        }
+        if (    rentSearch.getRegionEnName()!= null ||
+                rentSearch.getPriceBlock()!= null  ||
+                rentSearch.getAreaBlock()!= null  ||
+                rentSearch.getRentWay()>0 ||
+                rentSearch.getKeywords()!=null ||
+                rentSearch.getDirection()>0) {
             ServiceMultiResult<Long> serviceResult = searchService.query(rentSearch);
             if (serviceResult.getTotal() == 0) {
                 return new ServiceMultiResult<>(0, new ArrayList<>());
