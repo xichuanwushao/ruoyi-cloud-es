@@ -10,7 +10,10 @@ import com.ruoyi.news.service.ServiceMultiResult;
 import com.ruoyi.news.service.ServiceResult;
 import com.ruoyi.news.service.house.IAddressService;
 import com.ruoyi.news.service.house.IHouseUIService;
+import com.ruoyi.news.service.search.HouseBucketDTO;
+import com.ruoyi.news.service.search.ISearchService;
 import com.ruoyi.news.util.base.RentValueBlock;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +31,8 @@ public class HouseUIController {
     private IAddressService addressService;
     @Resource
     private IHouseUIService houseService;
-
+    @Resource
+    private ISearchService searchService;
 
 
     @GetMapping("house")
@@ -118,5 +122,31 @@ public class HouseUIController {
 
         return "house-detail";
     }
+
+
+    //地图页面显示 北京 12套正在出租 共5个区域
+    @GetMapping("house/map")
+    public String rentMapPage(@RequestParam(value = "cityEnName") String cityEnName,
+                              Model model,
+                              HttpSession session,
+                              RedirectAttributes redirectAttributes) {
+        ServiceResult<SupportAddressDTO> city = addressService.findCity(cityEnName);
+        if (!city.isSuccess()) {
+            redirectAttributes.addAttribute("msg", "must_chose_city");
+            return "redirect:/index";
+        } else {
+            session.setAttribute("cityName", cityEnName);
+            model.addAttribute("city", city.getResult());
+        }
+
+        ServiceMultiResult<SupportAddressDTO> regions = addressService.findAllRegionsByCityName(cityEnName);
+        ServiceMultiResult<HouseBucketDTO> serviceResult = searchService.mapAggregate(cityEnName);
+
+        model.addAttribute("aggData", serviceResult.getResult());
+        model.addAttribute("total", serviceResult.getTotal());
+        model.addAttribute("regions", regions.getResult());
+        return "rent-map";
+    }
+
 
 }

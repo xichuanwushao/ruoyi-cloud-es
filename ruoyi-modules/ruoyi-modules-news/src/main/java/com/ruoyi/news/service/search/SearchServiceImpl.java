@@ -30,6 +30,8 @@ import org.elasticsearch.index.reindex.BulkByScrollResponse;
 import org.elasticsearch.index.reindex.DeleteByQueryRequest;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
@@ -329,7 +331,32 @@ public class SearchServiceImpl implements ISearchService {
 
     @Override
     public ServiceMultiResult<HouseBucketDTO> mapAggregate(String cityEnName) {
-        return null;
+        //首先查询城市数据 过滤城市
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder()
+                .query(QueryBuilders.boolQuery().filter(QueryBuilders.termQuery(HouseIndexKey.CITY_EN_NAME, cityEnName)))
+                //根据区域来聚合 使用AGG_REGION分组 REGION_EN_NAME字段聚合
+                .aggregation(AggregationBuilders.terms(HouseIndexKey.AGG_REGION).field(HouseIndexKey.REGION_EN_NAME));
+        SearchRequest searchRequest = new SearchRequest(INDEX_NAME).source(searchSourceBuilder);
+        SearchResponse response = null;
+        try {
+            response = esClient.search(searchRequest, RequestOptions.DEFAULT);
+        } catch (IOException e) {
+            return new ServiceMultiResult<>(0, null);
+        }
+        logger.debug(searchRequest.toString());
+
+        //初始化一个结果集
+        List<HouseBucketDTO> buckets = new ArrayList<>();
+        if (response.status() != RestStatus.OK) {
+            logger.warn("Aggregate status is not ok for " + searchRequest);
+            return new ServiceMultiResult<>(0, buckets);
+        }
+        Terms terms = response.getAggregations().get(HouseIndexKey.AGG_REGION);
+        for (Terms.Bucket bucket : terms.getBuckets()) {
+            buckets.add(new HouseBucketDTO(bucket.getKeyAsString(), bucket.getDocCount()));
+        }
+
+        return new ServiceMultiResult<>(response.getHits().getTotalHits().value, buckets);
     }
 
     @Override
