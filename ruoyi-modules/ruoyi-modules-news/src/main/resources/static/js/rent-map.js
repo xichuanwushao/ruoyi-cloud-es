@@ -24,15 +24,14 @@ function load(city, regions, aggData) {
     drawRegion(map, regions);
 
     loadHouseData();//地图左侧加载具体的房源数据
-    //
-    // // 缩放事件
-    // map.addEventListener('zoomend', function (event) {
-    //     mapResize(event.target);
-    // });
-    // // 地图拖拽完成事件
-    // map.addEventListener('dragend', function (event) {
-    //     mapResize(event.target);
-    // });
+    // 缩放事件
+    map.addEventListener('zoomend', function (event) {
+        mapResize(event.target);
+    });
+    // 地图拖拽完成事件
+    map.addEventListener('dragend', function (event) {
+        mapResize(event.target);
+    });
 }
 
 /**
