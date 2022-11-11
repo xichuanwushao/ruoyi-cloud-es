@@ -4,6 +4,7 @@ package com.ruoyi.news.controller;
 import com.ruoyi.news.domain.SupportAddress;
 import com.ruoyi.news.domain.dto.HouseDTO;
 import com.ruoyi.news.domain.dto.SupportAddressDTO;
+import com.ruoyi.news.domain.form.MapSearch;
 import com.ruoyi.news.domain.form.RentSearch;
 import com.ruoyi.news.domain.web.UserDTO;
 import com.ruoyi.news.service.ServiceMultiResult;
@@ -12,6 +13,7 @@ import com.ruoyi.news.service.house.IAddressService;
 import com.ruoyi.news.service.house.IHouseUIService;
 import com.ruoyi.news.service.search.HouseBucketDTO;
 import com.ruoyi.news.service.search.ISearchService;
+import com.ruoyi.news.util.base.ApiResponse;
 import com.ruoyi.news.util.base.RentValueBlock;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -146,6 +148,26 @@ public class HouseUIController {
         model.addAttribute("total", serviceResult.getTotal());
         model.addAttribute("regions", regions.getResult());
         return "rent-map";
+    }
+
+
+    @GetMapping("house/map/houses")
+    @ResponseBody
+    public ApiResponse rentMapHouses(@ModelAttribute MapSearch mapSearch) {
+        if (mapSearch.getCityEnName() == null) {
+            return ApiResponse.ofMessage(HttpStatus.BAD_REQUEST.value(), "必须选择城市");
+        }
+        ServiceMultiResult<HouseDTO> serviceMultiResult;
+        if (mapSearch.getLevel() < 13) {//地图缩放级别小于13 大于13查询边界的精确数据
+            serviceMultiResult = houseService.wholeMapQuery(mapSearch);
+        } else {
+            // 小地图查询必须要传递地图边界参数
+            serviceMultiResult = houseService.boundMapQuery(mapSearch);
+        }
+
+        ApiResponse response = ApiResponse.ofSuccess(serviceMultiResult.getResult());
+        response.setMore(serviceMultiResult.getTotal() > (mapSearch.getStart() + mapSearch.getSize()));
+        return response;
     }
 
 

@@ -178,12 +178,26 @@ public class HouseUIServiceImpl implements IHouseUIService {
 
     @Override
     public ServiceMultiResult<HouseDTO> wholeMapQuery(MapSearch mapSearch) {
-        return null;
+        ServiceMultiResult<Long> serviceResult = searchService.mapQuery(mapSearch.getCityEnName(), mapSearch.getOrderBy(), mapSearch.getOrderDirection(), mapSearch.getStart(), mapSearch.getSize());
+
+        if (serviceResult.getTotal() == 0) {
+            return new ServiceMultiResult<>(0, new ArrayList<>());
+        }
+        List<HouseDTO> houses = wrapperHouseResult(serviceResult.getResult());
+        return new ServiceMultiResult<>(serviceResult.getTotal(), houses);
+
     }
 
     @Override
     public ServiceMultiResult<HouseDTO> boundMapQuery(MapSearch mapSearch) {
-        return null;
+        ServiceMultiResult<Long> serviceResult = searchService.mapQuery(mapSearch);
+        if (serviceResult.getTotal() == 0) {
+            return new ServiceMultiResult<>(0, new ArrayList<>());
+        }
+
+        List<HouseDTO> houses = wrapperHouseResult(serviceResult.getResult());
+        return new ServiceMultiResult<>(serviceResult.getTotal(), houses);
+
     }
 
     @Override

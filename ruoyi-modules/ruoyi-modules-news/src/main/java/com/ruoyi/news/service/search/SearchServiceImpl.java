@@ -22,6 +22,7 @@ import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.geo.GeoPoint;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -361,11 +362,65 @@ public class SearchServiceImpl implements ISearchService {
 
     @Override
     public ServiceMultiResult<Long> mapQuery(String cityEnName, String orderBy, String orderDirection, int start, int size) {
-        return null;
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder()
+                .query(QueryBuilders.boolQuery().filter(QueryBuilders.termQuery(HouseIndexKey.CITY_EN_NAME, cityEnName)))
+                .sort(HouseSort.getSortKey(orderBy), SortOrder.fromString(orderDirection))
+                .from(start)
+                .size(size);
+        SearchRequest searchRequest = new SearchRequest(INDEX_NAME).source(searchSourceBuilder);
+        SearchResponse response = null;
+        try {
+            response = esClient.search(searchRequest, RequestOptions.DEFAULT);
+        } catch (IOException e) {
+            return new ServiceMultiResult<Long>(0, null);
+        }
+
+        List<Long> houseIds = new ArrayList<>();
+        if (response.status() != RestStatus.OK) {
+            logger.warn("Search status is not ok for " + searchRequest);
+            return new ServiceMultiResult<>(0, houseIds);
+        }
+
+        for (SearchHit hit : response.getHits()) {
+            houseIds.add(Longs.tryParse(String.valueOf(hit.getSourceAsMap().get(HouseIndexKey.HOUSE_ID))));
+        }
+        return new ServiceMultiResult<Long>(response.getHits().getTotalHits().value, houseIds);
     }
 
     @Override
     public ServiceMultiResult<Long> mapQuery(MapSearch mapSearch) {
-        return null;
+        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery()
+                .filter(QueryBuilders.termQuery(HouseIndexKey.CITY_EN_NAME, mapSearch.getCityEnName()))
+                .filter(
+                        QueryBuilders.geoBoundingBoxQuery("location")
+                                .setCorners(
+                                        new GeoPoint(mapSearch.getLeftLatitude(), mapSearch.getLeftLongitude()),
+                                        new GeoPoint(mapSearch.getRightLatitude(), mapSearch.getRightLongitude())
+                                )
+                );
+
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder()
+                .query(boolQuery)
+                .sort(HouseSort.getSortKey(mapSearch.getOrderBy()), SortOrder.fromString(mapSearch.getOrderDirection()))
+                .from(mapSearch.getStart())
+                .size(mapSearch.getSize());
+        SearchRequest searchRequest = new SearchRequest(INDEX_NAME).source(searchSourceBuilder);
+        SearchResponse response = null;
+        try {
+            response = esClient.search(searchRequest, RequestOptions.DEFAULT);
+        } catch (IOException e) {
+            return new ServiceMultiResult<Long>(0, null);
+        }
+
+        List<Long> houseIds = new ArrayList<>();
+        if (RestStatus.OK != response.status()) {
+            logger.warn("Search status is not ok for " + searchRequest);
+            return new ServiceMultiResult<>(0, houseIds);
+        }
+
+        for (SearchHit hit : response.getHits()) {
+            houseIds.add(Longs.tryParse(String.valueOf(hit.getSourceAsMap().get(HouseIndexKey.HOUSE_ID))));
+        }
+        return new ServiceMultiResult<Long>(response.getHits().getTotalHits().value, houseIds);
     }
 }
