@@ -10,6 +10,7 @@ function load(city, regions, aggData) {
     // 百度地图API功能
     var map = new BMap.Map("allmap", {minZoom: 12}); // 创建实例。设置地图显示最大级别为城市
     var point = new BMap.Point(city.baiduMapLongitude, city.baiduMapLatitude); // 城市中心
+    // var point = new BMap.Point(116.401682,39.917813); // 城市中心
     map.centerAndZoom(point, 12); // 初始化地图，设置中心点坐标及地图级别
 
     map.addControl(new BMap.NavigationControl({enableGeolocation: true})); // 添加比例尺控件
@@ -21,17 +22,17 @@ function load(city, regions, aggData) {
     }
 
     drawRegion(map, regions);
-
-    loadHouseData();
-
-    // 缩放事件
-    map.addEventListener('zoomend', function (event) {
-        mapResize(event.target);
-    });
-    // 地图拖拽完成事件
-    map.addEventListener('dragend', function (event) {
-        mapResize(event.target);
-    });
+    //
+    // loadHouseData();
+    //
+    // // 缩放事件
+    // map.addEventListener('zoomend', function (event) {
+    //     mapResize(event.target);
+    // });
+    // // 地图拖拽完成事件
+    // map.addEventListener('dragend', function (event) {
+    //     mapResize(event.target);
+    // });
 }
 
 /**
@@ -198,7 +199,7 @@ function mapResize(_map) {
         southWest = bounds.getSouthWest(), // 西南角
         northEast = bounds.getNorthEast(); // 东北角
 
-    var zoomLevel = _map.getZoom();
+    var zoomLevel = _map.getZoom();//地图缩放级别
 
     params = {
         level: zoomLevel,
@@ -208,12 +209,12 @@ function mapResize(_map) {
         rightLatitude: southWest.lat
     };
 
-    if (zoomLevel < 13) {
+    if (zoomLevel < 13) {//当缩放级别在13以下 展示所有标签
         for (var i = 0; i < labels.length; i++) {
             labels[i].show();
         }
     } else {
-        loadHouseData();
+        loadHouseData();//当缩放很小时 隐藏房源标签
         for (var i = 0; i < labels.length; i++) {
             labels[i].hide();
         }

@@ -54,9 +54,14 @@ public class AddressServiceImpl implements IAddressService {
 
         SupportAddressDTO cityAddressDTO = new SupportAddressDTO();
         BeanUtils.copyProperties(city, cityAddressDTO);
+        cityAddressDTO.setBaiduMapLatitude(city.getBaiduMapLat());
+        cityAddressDTO.setBaiduMapLongitude(city.getBaiduMapLng());
+
 
         SupportAddressDTO regionAddressDTO = new SupportAddressDTO();
         BeanUtils.copyProperties(region, regionAddressDTO);
+        regionAddressDTO.setBaiduMapLatitude(region.getBaiduMapLat());
+        regionAddressDTO.setBaiduMapLongitude(region.getBaiduMapLng());
 
 //        result.put(SupportAddress.Level.CITY, modelMapper.map(city, SupportAddressDTO.class));
 //        result.put(SupportAddress.Level.REGION, modelMapper.map(region, SupportAddressDTO.class));
@@ -85,6 +90,8 @@ public class AddressServiceImpl implements IAddressService {
 //            result.add(modelMapper.map(region, SupportAddressDTO.class));
             SupportAddressDTO supportAddressDTO = new SupportAddressDTO();
             BeanUtils.copyProperties(region, supportAddressDTO);
+            supportAddressDTO.setBaiduMapLatitude(region.getBaiduMapLat());
+            supportAddressDTO.setBaiduMapLongitude(region.getBaiduMapLng());
             result.add(supportAddressDTO);
         }
         return new ServiceMultiResult<>(regions.size(), result);
@@ -129,6 +136,8 @@ public class AddressServiceImpl implements IAddressService {
 
         SupportAddressDTO addressDTO = new SupportAddressDTO();
         BeanUtils.copyProperties(supportAddress, addressDTO);
+        addressDTO.setBaiduMapLatitude(supportAddress.getBaiduMapLat());
+        addressDTO.setBaiduMapLongitude(supportAddress.getBaiduMapLng());
         return ServiceResult.of(addressDTO);
     }
 
