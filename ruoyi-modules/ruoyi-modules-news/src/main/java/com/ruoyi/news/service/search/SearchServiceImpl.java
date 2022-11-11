@@ -12,6 +12,7 @@ import com.ruoyi.news.mapper.SupportAddressMapper;
 import com.ruoyi.news.service.IHouseService;
 import com.ruoyi.news.service.ServiceMultiResult;
 import com.ruoyi.news.service.ServiceResult;
+import com.ruoyi.news.service.house.IAddressService;
 import com.ruoyi.news.util.base.HouseSort;
 import com.ruoyi.news.util.base.RentValueBlock;
 import org.elasticsearch.action.index.IndexRequest;
@@ -68,6 +69,9 @@ public class SearchServiceImpl implements ISearchService {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private IAddressService addressService;
+
     @Override
     public void index(Long houseId) {
         HouseIndexMessage message = new HouseIndexMessage();
@@ -118,14 +122,15 @@ public class SearchServiceImpl implements ISearchService {
 //         SupportAddress city = supportAddressRepository.findByEnNameAndLevel(house.getCityEnName(), SupportAddress.Level.CITY.getValue());
 //        SupportAddress region = supportAddressRepository.findByEnNameAndLevel(house.getRegionEnName(), SupportAddress.Level.REGION.getValue());
         String address = city.getCnName() + region.getCnName() + house.getStreet() + house.getDistrict() + detail.getAddress();
-//TODO
-//        ServiceResult<BaiduMapLocation> location = addressService.getBaiduMapLocation(city.getCnName(), address);
-//        if (!location.isSuccess()) {
-//            this.index(message.getHouseId(), message.getRetry() + 1);
-//            return;
-//        }
 
-//TODO        indexTemplate.setLocation(location.getResult());
+        ServiceResult<BaiduMapLocation> location = addressService.getBaiduMapLocation(city.getCnName(), address);
+        if (!location.isSuccess()) {
+            this.index(message.getHouseId(), message.getRetry() + 1);
+            return;
+        }
+
+
+        indexTemplate.setLocation(location.getResult());
 
 // TODO       List<HouseTag> tags = tagRepository.findAllByHouseId(houseId);
 //        if (!CollectionUtils.isEmpty(tags)) {
