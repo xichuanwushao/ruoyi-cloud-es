@@ -22,8 +22,8 @@ function load(city, regions, aggData) {
     }
 
     drawRegion(map, regions);
-    //
-    // loadHouseData();
+
+    loadHouseData();//地图左侧加载具体的房源数据
     //
     // // 缩放事件
     // map.addEventListener('zoomend', function (event) {
