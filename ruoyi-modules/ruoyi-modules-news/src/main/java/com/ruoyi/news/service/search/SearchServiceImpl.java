@@ -1,6 +1,7 @@
 package com.ruoyi.news.service.search;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
 import com.google.common.primitives.Longs;
 import com.ruoyi.news.domain.House;
 import com.ruoyi.news.domain.HouseDetail;
@@ -8,6 +9,7 @@ import com.ruoyi.news.domain.SupportAddress;
 import com.ruoyi.news.domain.form.MapSearch;
 import com.ruoyi.news.domain.form.RentSearch;
 import com.ruoyi.news.domain.model.HouseIndexTemplate;
+import com.ruoyi.news.domain.model.HouseSuggest;
 import com.ruoyi.news.mapper.SupportAddressMapper;
 import com.ruoyi.news.service.IHouseService;
 import com.ruoyi.news.service.ServiceMultiResult;
@@ -23,6 +25,8 @@ import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.client.indices.AnalyzeRequest;
+import org.elasticsearch.client.indices.AnalyzeResponse;
 import org.elasticsearch.common.geo.GeoPoint;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -36,6 +40,11 @@ import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.SortOrder;
+import org.elasticsearch.search.suggest.Suggest;
+import org.elasticsearch.search.suggest.SuggestBuilder;
+import org.elasticsearch.search.suggest.SuggestBuilders;
+import org.elasticsearch.search.suggest.completion.CompletionSuggestion;
+import org.elasticsearch.search.suggest.completion.CompletionSuggestionBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -46,7 +55,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class SearchServiceImpl implements ISearchService {
@@ -171,9 +182,9 @@ public class SearchServiceImpl implements ISearchService {
     }
 
     private boolean create(HouseIndexTemplate indexTemplate) {
-//TODO        if (!updateSuggest(indexTemplate)) { //search-as-you-type自动补全
-//            return false;
-//        }
+        if (!updateSuggest(indexTemplate)) { //search-as-you-type自动补全
+            return false;
+        }
 
         try {
             IndexRequest source = new IndexRequest(INDEX_NAME).source(objectMapper.writeValueAsBytes(indexTemplate), XContentType.JSON);
@@ -187,9 +198,9 @@ public class SearchServiceImpl implements ISearchService {
         }
     }
     private boolean update(String esId, HouseIndexTemplate indexTemplate) {
-//TODO        if (!updateSuggest(indexTemplate)) {
-//            return false;
-//        }
+        if (!updateSuggest(indexTemplate)) {
+            return false;
+        }
 
         try {
             UpdateRequest request = new UpdateRequest().index(INDEX_NAME).doc(objectMapper.writeValueAsBytes(indexTemplate), XContentType.JSON).id(esId);
@@ -327,8 +338,96 @@ public class SearchServiceImpl implements ISearchService {
 
     @Override
     public ServiceResult<List<String>> suggest(String prefix) {
-        return null;
+        //提示多少个 默认5个 suggest要和索引字段名称对应起来
+        CompletionSuggestionBuilder suggestion = SuggestBuilders.completionSuggestion("suggest").prefix(prefix).size(5);//提示5个
+
+        SuggestBuilder suggestBuilder = new SuggestBuilder().addSuggestion("autocomplete", suggestion);//固定写法
+
+        SearchRequest searchRequest = new SearchRequest(INDEX_NAME).source(new SearchSourceBuilder().suggest(suggestBuilder));
+        SearchResponse response = null;
+        try {
+            response = esClient.search(searchRequest, RequestOptions.DEFAULT);
+        } catch (IOException e) {
+            return new ServiceResult<>(false);
+        }
+
+        logger.debug(searchRequest.toString());
+
+        Suggest suggest = response.getSuggest();
+        if (suggest == null) {
+            return ServiceResult.of(new ArrayList<>());
+        }
+        Suggest.Suggestion result = suggest.getSuggestion("autocomplete");
+
+        int maxSuggest = 0;
+        Set<String> suggestSet = new HashSet<>();//需要对结果进行过滤 因为有重复的提示词语
+
+        for (Object term : result.getEntries()) {
+            if (term instanceof CompletionSuggestion.Entry) {
+                CompletionSuggestion.Entry item = (CompletionSuggestion.Entry) term;
+
+                if (item.getOptions().isEmpty()) {//提示备选项为空
+                    continue;
+                }
+
+                for (CompletionSuggestion.Entry.Option option : item.getOptions()) {//提示备选项不为空
+                    String tip = option.getText().string();
+                    if (suggestSet.contains(tip)) {
+                        continue;
+                    }
+                    suggestSet.add(tip);
+                    maxSuggest++;
+                }
+            }
+
+            if (maxSuggest > 5) {
+                break;
+            }
+        }
+        List<String> suggests = Lists.newArrayList(suggestSet.toArray(new String[]{}));
+        return ServiceResult.of(suggests);
     }
+
+    private boolean updateSuggest(HouseIndexTemplate indexTemplate) {
+        AnalyzeRequest analyzeRequest = AnalyzeRequest.withIndexAnalyzer(INDEX_NAME, "ik_smart", indexTemplate.getTitle(),
+                indexTemplate.getLayoutDesc(), indexTemplate.getRoundService(),
+                indexTemplate.getDescription(), indexTemplate.getSubwayLineName(),//自动补全其实就是去请求分词接口
+                indexTemplate.getSubwayStationName());
+        List<AnalyzeResponse.AnalyzeToken> tokens = null;
+
+        try {
+            AnalyzeResponse response = esClient.indices().analyze(analyzeRequest, RequestOptions.DEFAULT);//分词结果
+            tokens = response.getTokens();//tokens就是每一个词语
+        } catch (IOException e) {
+            logger.error("updateSuggest错误", e);
+            return false;
+        }
+        if (tokens == null) {
+            logger.warn("Can not analyze token for house: " + indexTemplate.getHouseId());
+            return false;
+        }
+
+        List<HouseSuggest> suggests = new ArrayList<>();
+        for (AnalyzeResponse.AnalyzeToken token : tokens) {
+            // 排序数字类型 & 小于2个字符的分词结果
+            if ("<NUM>".equals(token.getType()) || token.getTerm().length() < 2) {
+                continue;
+            }
+
+            HouseSuggest suggest = new HouseSuggest();
+            suggest.setInput(token.getTerm());//这里默认一样的权重
+            suggests.add(suggest);
+        }
+
+        // 定制化小区自动补全 对于一些keyword不需要分词的字如何去做呢
+        HouseSuggest suggest = new HouseSuggest();
+        suggest.setInput(indexTemplate.getDistrict());
+        suggests.add(suggest);
+
+        indexTemplate.setSuggest(suggests);
+        return true;
+    }
+
 
     @Override
     public ServiceResult<Long> aggregateDistrictHouse(String cityEnName, String regionEnName, String district) {
