@@ -23,6 +23,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -170,5 +171,21 @@ public class HouseUIController {
         return response;
     }
 
+    /**
+     * 自动补全接口
+     */
+    @GetMapping("house/autocomplete")
+    @ResponseBody
+    public ApiResponse autocomplete(@RequestParam(value = "prefix") String prefix) {
 
+        if (prefix.isEmpty()) {
+            return ApiResponse.ofStatus(ApiResponse.Status.BAD_REQUEST);
+        }
+        ServiceResult<List<String>> result = this.searchService.suggest(prefix);
+//        List<String> result = new ArrayList<>();
+//        result.add("超棒瓦力");
+//        result.add("很棒瓦力");
+//        return ApiResponse.ofSuccess(result);
+        return ApiResponse.ofSuccess(result.getResult());
+    }
 }
