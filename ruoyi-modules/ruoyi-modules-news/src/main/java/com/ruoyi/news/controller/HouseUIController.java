@@ -188,4 +188,21 @@ public class HouseUIController {
 //        return ApiResponse.ofSuccess(result);
         return ApiResponse.ofSuccess(result.getResult());
     }
+
+
+    /**
+     * 将mysql租房数据导入es
+     */
+    @GetMapping("houseIndex")
+    public ApiResponse houseIndex() {
+
+        Long targetHouseId = 16L;
+        searchService.index(targetHouseId);
+//        boolean success = searchService.index(targetHouseId);
+//        Assert.assertTrue(success);
+        for(int i = 15; i <= 27; i++){
+            searchService.index((long)i);
+        }
+        return ApiResponse.ofSuccess("SUCCESS");
+    }
 }
