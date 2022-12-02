@@ -193,8 +193,9 @@ public class HouseUIController {
     /**
      * 将mysql租房数据导入es
      */
-    @GetMapping("houseIndex")
-    public ApiResponse houseIndex() {
+    @GetMapping("houseDataToEs")
+    @ResponseBody
+    public ApiResponse houseDataToEs() {
 
         Long targetHouseId = 16L;
         searchService.index(targetHouseId);
@@ -203,6 +204,6 @@ public class HouseUIController {
         for(int i = 15; i <= 27; i++){
             searchService.index((long)i);
         }
-        return ApiResponse.ofSuccess("SUCCESS");
+        return ApiResponse.ofSuccess("success");
     }
 }
