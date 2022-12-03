@@ -54,8 +54,10 @@
 #### 友情链接
 * 感谢若依大佬开源的微服务项目:https://gitee.com/y_project/RuoYi-Cloud
 * 感谢蜗牛不会飞大佬开源的找房项目:https://gitee.com/myxw/ElasticSearch_House
+* 感谢老汉大佬开源的easy-es:https://gitee.com/dromara/easy-es
 #### 插件版本
 * RuoYi-Cloud 3.5.0
 * Nacos 2.0.2
 * Node.js 14.0.0
 * npm 6.14.4
+* elasticsearch 7.14.1
