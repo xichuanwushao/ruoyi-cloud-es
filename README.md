@@ -221,3 +221,218 @@ http.cors.allow-headers: Authorization,Content-Type
 先去github下载分词包[elasticsearch-analysis-ik-7.14.1.zip](https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v7.14.1/elasticsearch-analysis-ik-7.14.1.zip)
 
 然后解压到该目录下/data/docker_data/es-kabana/es/plugins/analysis-ik-7.14.1
+
+## 启动说明
+
+## 一.启动前数据准备,创建es索引
+
+### 1.1 创建文章内容索引article
+
+请求方式：PUT
+
+请求地址：http://127.0.0.1:9202/article
+
+请求内容：
+
+	{
+	  "settings": {
+	    "number_of_replicas": 0
+	  },
+	  "mappings": {
+	    "dynamic": false,
+	    "properties": {
+	        "publishTime": {
+	          "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis",
+	          "type": "date"
+	        },
+	        "articleCover": {
+	          "type": "keyword"
+	        },
+	        "articleType": {
+	          "type": "integer"
+	        },
+	        "publishUserId": {
+	          "type": "keyword"
+	        },
+	        "title": {
+	          "analyzer": "ik_smart",
+	          "type": "text"
+	        },
+	        "categoryId": {
+	          "type": "integer"
+	        }
+	      }
+	  }
+	}
+
+参数说明：
+
+	number_of_replicas": 0  <!-- 副本数设置为0 -->
+
+
+正确返回：
+
+```
+{
+    "acknowledged": true,
+    "shards_acknowledged": true,
+    "index": "article"
+}
+```
+
+------
+
+### 1.2 创建地图找房索引article
+
+请求方式：PUT
+
+请求地址：http://127.0.0.1:9202/xunwu
+
+请求内容：
+
+	{
+	  "settings": {
+	    "number_of_replicas": 0
+	  },
+	  "mappings": {
+	    "dynamic": false,
+	    "properties": {
+	      "id": {
+	        "type": "long"
+	      },
+	      "houseId": {
+	        "type": "long"
+	      },
+	      "title": {
+	        "type": "text",
+	        "analyzer": "ik_smart",
+	        "search_analyzer": "ik_smart"
+	      },
+	      "price": {
+	        "type": "integer"
+	      },
+	      "area": {
+	        "type": "integer"
+	      },
+	      "createTime": {
+	        "type": "date",
+	        "format": "strict_date_optional_time||epoch_millis"
+	      },
+	      "lastUpdateTime": {
+	        "type": "date",
+	        "format": "strict_date_optional_time||epoch_millis"
+	      },
+	      "cityEnName": {
+	        "type": "keyword"
+	      },
+	      "regionEnName": {
+	        "type": "keyword"
+	      },
+	      "direction": {
+	        "type": "integer"
+	      },
+	      "distanceToSubway": {
+	        "type": "integer"
+	      },
+	      "subwayLineName": {
+	        "type": "keyword"
+	      },
+	      "subwayStationName": {
+	        "type": "keyword"
+	      },
+	      "tags": {
+	        "type": "text"
+	      },
+	      "street": {
+	        "type": "keyword"
+	      },
+	      "district": {
+	        "type": "keyword"
+	      },
+	      "description": {
+	        "type": "text",
+	        "analyzer": "ik_smart",
+	        "search_analyzer": "ik_smart"
+	      },
+	      "layoutDesc" : {
+	        "type": "text",
+	        "analyzer": "ik_smart",
+	        "search_analyzer": "ik_smart"
+	      },
+	      "traffic": {
+	        "type": "text",
+	        "analyzer": "ik_smart",
+	        "search_analyzer": "ik_smart"
+	      },
+	      "roundService": {
+	        "type": "text",
+	        "analyzer": "ik_smart",
+	        "search_analyzer": "ik_smart"
+	      },
+	      "rentWay": {
+	        "type": "integer"
+	      },
+	      "suggest": {
+	        "type": "completion"
+	      },
+	      "location": {
+	        "type": "geo_point"
+	      }
+	    }
+	  }
+	}
+
+参数说明：
+
+	number_of_replicas": 0  <!-- 副本数设置为0 -->
+
+
+正确返回：
+
+```
+{
+    "acknowledged": true,
+    "shards_acknowledged": true,
+    "index": "xunwu"
+}
+```
+
+------
+
+### 1.3 删除索引  (此步不需要执行)
+
+请求方式：DELETE
+
+请求地址：http://127.0.0.1:9202/article
+
+
+正确返回：
+
+```
+{
+    "acknowledged": true
+}
+```
+
+------
+
+### 1.4 将租房数据从mysql中同步到es（访问该接口即可）
+
+请求方式：GET
+
+请求地址：http://127.0.0.1:9205/rent/houseDataToEs
+
+正确返回：
+
+```
+{
+    "code": 200,
+    "message": "OK",
+    "data": "success",
+    "more": false
+}
+```
+
+------
+
+### 
