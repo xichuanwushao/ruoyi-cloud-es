@@ -133,13 +133,10 @@
 ```
 mkdir -p /data/docker_data/es-kabana
 mkdir -p /data/docker_data/es-kabana/es/config
-mkdir -p /data/docker_data/es-kabana/kibana/config
 touch    /data/docker_data/es-kabana/docker-compose.yml
 touch    /data/docker_data/es-kabana/es/config/elasticsearch.yml
-touch    /data/docker_data/es-kabana/kibana/config/kibana.yml
 vim      /data/docker_data/es-kabana/docker-compose.yml
 vim      /data/docker_data/es-kabana/es/config/elasticsearch.yml
-vim      /data/docker_data/es-kabana/kibana/config/kibana.yml
 cd /data/docker_data/es-kabana
 docker-compose up -d 开启es
 docker-compose down 关闭es
