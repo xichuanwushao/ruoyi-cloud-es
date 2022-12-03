@@ -1,13 +1,13 @@
 
 ## 平台简介
-*基RuoYi-cloud3.5.0 + elasticsearch7.14.1 的房源管理系统 ~
+*基RuoYi-cloud3.5.0 + elasticsearch7.14.1 + easy-es的房源系统，支持地图找房(百度地图) ~
 
 记得右上角点个 star 持续关注更新哟~~
 * <img src="https://image-1304556315.cos.ap-beijing.myqcloud.com/star.png"/>
 ## 内置功能
 后台页面
 * 1.  房源信息：支持后台添加,修改,删除,编辑房源信息
-      前台页面
+前台页面
 * 1.  聚合统计：统计每个区域每个小区房源个数。
 * 2.  搜索提示(search-as-you-type)：根据输入文字动态弹出提示内容。
 * 3.  地图找房：使用百度地图显示房源信息,地图拖拽和缩放变更房源数据。
@@ -53,6 +53,7 @@
 * RuoYiFileApplication( 文件服务 )
 #### 友情链接
 * 感谢若依大佬开源的微服务项目:https://gitee.com/y_project/RuoYi-Cloud
+* 感谢蜗牛不会飞大佬开源的找房项目:https://gitee.com/myxw/ElasticSearch_House
 #### 插件版本
 * RuoYi-Cloud 3.5.0
 * Nacos 2.0.2
