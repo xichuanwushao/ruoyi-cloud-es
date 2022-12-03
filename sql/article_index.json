@@ -1,0 +1,30 @@
+{
+  "settings": {
+    "number_of_replicas": 0
+  },
+  "mappings": {
+    "dynamic": false,
+    "properties": {
+        "publishTime": {
+          "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis",
+          "type": "date"
+        },
+        "articleCover": {
+          "type": "keyword"
+        },
+        "articleType": {
+          "type": "integer"
+        },
+        "publishUserId": {
+          "type": "keyword"
+        },
+        "title": {
+          "analyzer": "ik_smart",
+          "type": "text"
+        },
+        "categoryId": {
+          "type": "integer"
+        }
+      }
+  }
+}
