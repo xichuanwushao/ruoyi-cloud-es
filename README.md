@@ -83,35 +83,37 @@
 
 ### 1.1 安装docker
 
-	  yum install -y yum-utils
-	
-	  # 阿里云地址（国内地址，相对更快）
-	  yum-config-manager \
-	      --add-repo \
-	      http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
-	
-	  yum install docker-ce docker-ce-cli containerd.io
+```
+    yum install -y yum-utils
+
+  # 阿里云地址（国内地址，相对更快）
+  yum-config-manager \
+      --add-repo \
+      http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+
+  yum install docker-ce docker-ce-cli containerd.io
 
 
-​
-​	  docker version # 查看Docker版本信息
-​
+  docker version # 查看Docker版本信息
 
-	  systemctl status docker		# 查看 docker 服务状态
-	
-	  systemctl start docker		# 启动 docker 服务:
-	  systemctl stop docker		# 停止 docker 服务:
-	  systemctl status docker		# 查看 docker 服务状态
-	  systemctl restart docker	# 重启 docker 服务
-	
-	  vim /etc/docker/daemon.json
-	  # 添加如下内容，可以自己替换。默认地址是我的创建的
-	  {
-	    "registry-mirrors": ["https://mr63yffu.mirror.aliyuncs.com"]
-	  }
-	
-	  systemctl daemon-reload
-	  systemctl restart docker	# 重启 docker 服务
+  systemctl status docker		# 查看 docker 服务状态
+
+  systemctl start docker		# 启动 docker 服务:
+  systemctl stop docker		# 停止 docker 服务:
+  systemctl status docker		# 查看 docker 服务状态
+  systemctl restart docker	# 重启 docker 服务
+
+  vim /etc/docker/daemon.json
+  # 添加如下内容，可以自己替换。默认地址是我的创建的
+  {
+    "registry-mirrors": ["https://mr63yffu.mirror.aliyuncs.com"]
+  }
+
+  systemctl daemon-reload
+  systemctl restart docker	# 重启 docker 服务
+```
+
+
 
 ### 1.2 安装docker-compose
 
@@ -126,12 +128,24 @@
 
 ### 1.3 安装es
 
-`mkdir -p /data/docker_data/es-kabana`
-`cd /data/docker_data/es-kabana`
-`touch /data/docker_data/es-kabana/docker-compose.yml`
-`vim /data/docker_data/es-kabana/docker-compose.yml`
+#### 执行命令
 
-docker-compose.yml文件内容如下：
+```
+mkdir -p /data/docker_data/es-kabana
+mkdir -p /data/docker_data/es-kabana/es/config
+mkdir -p /data/docker_data/es-kabana/kibana/config
+touch    /data/docker_data/es-kabana/docker-compose.yml
+touch    /data/docker_data/es-kabana/es/config/elasticsearch.yml
+touch    /data/docker_data/es-kabana/kibana/config/kibana.yml
+vim      /data/docker_data/es-kabana/docker-compose.yml
+vim      /data/docker_data/es-kabana/es/config/elasticsearch.yml
+vim      /data/docker_data/es-kabana/kibana/config/kibana.yml
+cd /data/docker_data/es-kabana
+docker-compose up -d 开启es
+docker-compose down 关闭es
+```
+
+#### docker-compose.yml内容如下：
 
 	version: '3'
 	
@@ -154,7 +168,7 @@ docker-compose.yml文件内容如下：
 	      LANG: en_US.UTF-8
 	      discovery.type: single-node
 	      ES_JAVA_OPTS: "-Xmx512m -Xms512m"
-	      ELASTIC_PASSWORD: "ZdJ5NuQ-SQb9" # elastic账号密码
+	      ELASTIC_PASSWORD: "123456" # elastic账号密码
 	    ports:
 	      - "9202:9200"
 	      - "9302:9300"
@@ -190,12 +204,7 @@ docker-compose.yml文件内容如下：
 	    networks:
 	      - es
 
-`mkdir -p /data/docker_data/es-kabana/es/config`
-`cd /data/docker_data/es-kabana/es/config`
-`touch /data/docker_data/es-kabana/es/config/elasticsearch.yml`
-`vim /data/docker_data/es-kabana/es/config/elasticsearch.yml`
-
-elasticsearch.yml文件内容如下：
+#### elasticsearch.yml内容如下：
 
 ```
 cluster.name: "docker-cluster"
@@ -210,13 +219,7 @@ http.cors.allow-headers: Authorization,Content-Type
 #xpack.security.transport.ssl.enabled: true
 ```
 
-`cd /data/docker_data/es-kabana`
-
-`docker-compose up -d 开启`
-
-`docker-compose down 关闭`
-
-1.3 安装中文分词
+### 1.4安装中文分词
 
 先去github下载分词包[elasticsearch-analysis-ik-7.14.1.zip](https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v7.14.1/elasticsearch-analysis-ik-7.14.1.zip)
 
