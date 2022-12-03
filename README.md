@@ -1,6 +1,6 @@
 
 ## 平台简介
-*基RuoYi-cloud3.5.0 + elasticsearch7.14.1 + easy-es的房源系统，支持地图找房(百度地图) ~
+*基于RuoYi-cloud3.5.0 + elasticsearch7.14.1的搜索引擎演示项目,使用2个经典案例(百度地图找房+文章内容搜索),演示es常用的功能及代码原生写法和简化写法(easy-es)~
 
 记得右上角点个 star 持续关注更新哟~~
 * <img src="https://image-1304556315.cos.ap-beijing.myqcloud.com/star.png"/>
